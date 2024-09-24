@@ -10,7 +10,9 @@ const todoApiUrl = environment === AuthFlows.DEMO
 
 const getTodoData = async (req: NextApiRequest): Promise<TodoItem[]> => {
     try {
-        const response = await axios.get(`${todoApiUrl}/todos`);
+        const { userId } = req.query;
+        const url = userId ? `${todoApiUrl}/user/${userId}/todos/` : `${todoApiUrl}/todos`;
+        const response = await axios.get(url);
         return response.data;
     } catch (error) {
         throw new Error('Failed to fetch todos');
@@ -80,6 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(405).json({ error: 'Method not allowed' });
         }
     } catch (error: any) {
+        console.error(error);
         return res.status(500).json({ error: error.message });
     }
 }
