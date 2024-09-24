@@ -2,7 +2,7 @@ import React from "react";
 import {TodoList} from "@/app/components/TodoList";
 import {AuthFlows} from "@/interface/types";
 
-export default async function TodoPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
+export default async function TodoPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
 
     const authFlow = searchParams.flow || AuthFlows.DEMO;
 
@@ -10,12 +10,12 @@ export default async function TodoPage({ searchParams }: { searchParams: { [key:
 
     return (
         <>
-            <div>
+            <div className="h-screen bg-gray-700 rounded-lg w-full text-center p-24 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 lg:gap-4">
                 <div>
 
                 </div>
                 <div>
-                    <TodoList todos={initialTodoData || []} />
+                    <TodoList todos={initialTodoData || []}/>
                 </div>
                 <div>
 
