@@ -12,11 +12,11 @@ export default function RootLayout({
             <title>My App</title>
             <meta name="description" content="This is my Next.js app"/>
         </head>
-        <body className="max-h-screen overflow-y-scroll">
-        <main className="container mx-auto py-4">
+        <body className="bg-white max-h-screen">
+        <main className="container mx-auto">
             {children} {/* Page content is rendered here */}
         </main>
-        <footer className="bg-gray-900 p-4 text-white text-center">
+        <footer className="bg-darkGreen p-4 text-white text-center">
             &copy; 2024 Frankie Rodriguez. All rights reserved.
         </footer>
         </body>

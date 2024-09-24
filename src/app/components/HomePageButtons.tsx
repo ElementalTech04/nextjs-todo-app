@@ -21,11 +21,11 @@ export const HomePageButtons = () => {
     return (
         <>
             <div className="flex justify-center items-center p-24">
-            <button className="bg-yellow hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition ease-in-out duration-200 m-5"
+            <button className="bg-darkGreen hover:bg-yellow hover:text-black text-white font-bold py-2 px-4 rounded-lg shadow-lg transition ease-in-out duration-200 m-5"
                     onClick={handleAppRedirect}>Use the App
             </button>
             <button
-                className="bg-gray-100 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow transition ease-in-out duration-200 m5x       "
+                className="bg-white hover:bg-gray-500 text-gray-800 hover:text-white font-semibold py-2 px-4 rounded-lg shadow transition ease-in-out duration-200 m5x       "
                 onClick={handleDemoRedirect}>Use the Demo
             </button>
             </div>

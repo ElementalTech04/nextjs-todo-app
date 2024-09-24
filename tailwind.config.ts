@@ -11,6 +11,7 @@ const config: {
         darkGreen: string;
         background: string;
         yellow: string;
+        mustard: string;
         black: string;
         foreground: string
       }
@@ -29,7 +30,8 @@ const config: {
         background: "var(--background)",
         foreground: "var(--foreground)",
         red: "#C97064",
-        yellow: "#FFBA00",
+        yellow: "#F2C500",
+        mustard: "#F59D00",
         lightGreen: "#68A357",
         darkGreen: "#034732",
         black: "#191919",
