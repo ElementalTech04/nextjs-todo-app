@@ -1,48 +1,85 @@
-import {NextApiRequest, NextApiResponse} from "next";
-import {AuthFlows} from "@/interface/types";
+import { NextApiRequest, NextApiResponse } from 'next';
+import axios from 'axios';
+import { AuthFlows, TodoItem } from '@/interface/types';
 
 const environment = process.env.ENVIRONMENT;
 
-const todoApi = environment === AuthFlows.DEMO ? process.env.DEMO_API : process.env.LAMBDA_API;
+const todoApiUrl = environment === AuthFlows.DEMO
+    ? process.env.MOCK_DATA_API_URL
+    : process.env.CHRONICLE_API_GATEWAY;
 
-const getTodoData = (req: NextApiRequest) => {
-}
+const getTodoData = async (req: NextApiRequest): Promise<TodoItem[]> => {
+    try {
+        const response = await axios.get(`${todoApiUrl}/todos`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch todos');
+    }
+};
 
-const saveTodoData = (content: any) => {
+const createTodoData = async (content: TodoItem): Promise<TodoItem> => {
+    try {
+        const response = await axios.post(`${todoApiUrl}/todos`, content);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to create todo');
+    }
+};
 
-}
+const saveTodoData = async (content: TodoItem): Promise<TodoItem> => {
+    try {
+        const response = await axios.put(`${todoApiUrl}/todos/${content.id}`, content);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to update todo');
+    }
+};
 
-const createTodoData = (content:any) => {
+const deleteTodoData = async (id: string | string[] | undefined): Promise<void> => {
+    try {
+        await axios.delete(`${todoApiUrl}/todos/${id}`);
+    } catch (error) {
+        throw new Error('Failed to delete todo');
+    }
+};
 
-}
-
-const deleteTodoData = (id: string | string[] | undefined) => {
-}
-
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    const {method} = req;
+// API Route Handler
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const { method } = req;
     const { content } = req.body;
 
     try {
         switch (method) {
-            case 'GET':
-                return res.status(200).json(getTodoData);
-            case 'POST':
+            case 'GET': {
+                const todos = await getTodoData(req);
+                return res.status(200).json(todos);
+            }
+            case 'POST': {
                 if (!content) {
                     return res.status(400).json({ error: 'Content is required' });
                 }
-                const newTodoData = createTodoData(content);
+                const newTodoData = await createTodoData(content);
                 return res.status(201).json(newTodoData);
-            case 'PUT':
-                saveTodoData(content);
-                return res.status(200).json(content);
-            case 'DELETE':
-                deleteTodoData(req.query.id);
-                return res.status(204).end()
+            }
+            case 'PUT': {
+                if (!content || !content.id) {
+                    return res.status(400).json({ error: 'Todo ID is required for updating' });
+                }
+                const updatedTodoData = await saveTodoData(content);
+                return res.status(200).json(updatedTodoData);
+            }
+            case 'DELETE': {
+                const { id } = req.query;
+                if (!id) {
+                    return res.status(400).json({ error: 'ID is required for deletion' });
+                }
+                await deleteTodoData(id);
+                return res.status(204).end();
+            }
             default:
-                return res.status(401).json({error: 'Method not allowed'});
+                return res.status(405).json({ error: 'Method not allowed' });
         }
-    } catch (error) {
-        return res.status(500).json({error: error.message});
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message });
     }
 }
