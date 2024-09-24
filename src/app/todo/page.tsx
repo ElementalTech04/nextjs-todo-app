@@ -1,6 +1,6 @@
 import React from "react";
 
-export const TodoPage = () => {
+export default function TodoPage() {
     return (
         <div>
             <h1>Todo Page</h1>

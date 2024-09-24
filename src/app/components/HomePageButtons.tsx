@@ -2,14 +2,14 @@
 
 import React from "react";
 import {useRouter} from "next/navigation";
-import {AuthFlows} from "@/app/constants";
+import {AuthFlows} from "@/interface/types";
 
 export const HomePageButtons = () => {
 
     const router = useRouter(); // Initialize router
 
     const handleAppRedirect = () => {
-        const flow = process.env.ENVIRONMENT !== undefined && process.env.ENVIRONMENT.toLowerCase() === 'production'
+        const flow = process.env.ENVIRONMENT !== undefined && process.env.ENVIRONMENT.toLowerCase() === AuthFlows.PROD
             ? AuthFlows.PROD
             : AuthFlows.DEV;
         router.push(`/todo?flow=${flow}`);
@@ -20,13 +20,15 @@ export const HomePageButtons = () => {
     };
     return (
         <>
-            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition ease-in-out duration-200"
+            <div className="flex justify-center items-center p-24">
+            <button className="bg-yellow hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition ease-in-out duration-200 m-5"
                     onClick={handleAppRedirect}>Use the App
             </button>
             <button
-                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow transition ease-in-out duration-200"
+                className="bg-gray-100 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow transition ease-in-out duration-200 m5x       "
                 onClick={handleDemoRedirect}>Use the Demo
             </button>
+            </div>
         </>
     )
 }
