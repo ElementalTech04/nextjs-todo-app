@@ -16,8 +16,8 @@ export default function RootLayout({
         <main className="container mx-auto py-8">
             {children}  {/* Page content is rendered here */}
         </main>
-        <footer className="bg-blue-500 p-4 text-white text-center">
-            &copy; 2024 My App. All rights reserved.
+        <footer className="bg-gray-900 p-4 text-white text-center">
+            &copy; 2024 Frankie Rodriguez. All rights reserved.
         </footer>
         </body>
         </html>

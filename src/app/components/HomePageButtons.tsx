@@ -20,11 +20,12 @@ export const HomePageButtons = () => {
     };
     return (
         <>
-            <button className="btn btn-primary btn-lg btn-primary btn-lg btn-block"
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition ease-in-out duration-200"
                     onClick={handleAppRedirect}>Use the App
             </button>
-            <button className="btn btn-primary btn-lg btn-primary btn-lg btn-block"
-                    onClick={handleDemoRedirect}>Use the Demo
+            <button
+                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow transition ease-in-out duration-200"
+                onClick={handleDemoRedirect}>Use the Demo
             </button>
         </>
     )

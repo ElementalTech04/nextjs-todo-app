@@ -1,19 +1,25 @@
 import React from "react";
-import RootLayout from "@/app/layout";
 import {HomePageButtons} from "@/app/components/HomePageButtons";
+import welcomeSvg from "@/assets/images/welcome.svg";
+import Image from "next/image";
 
 export function HomePage() {
 
 
     return (
         <>
-            <div className="grid grid-cols-[1fr 2fr 1 fr] grid-rows-4 gap-4 h-screen bg-gray-100 p-4 rounded-lg">
-                <h1 className="text-3xl leading-tight">Hello! Welcome to my Todo App.</h1>
-                <p>I built this Todo App to demonstrate some of the possibilities of Next.js, Redux, tailwind,
-                    Clerk,
-                    and Framer Motion. Select which path to go down below. Use the app or use the demo?</p>
-                <div>
-                    <HomePageButtons/>
+            <div className="grid grid-cols-[1fr 2fr 1fr] grid-rows-4 gap-4 h-screen p-4">
+                <div className="row-span-full bg-gray-700 rounded-lg w-full h-full p-6 text-center p-24">
+                    <div className="col-span-2 row-start-1 row-end-2 flex items-center justify-center">
+                        <Image src={welcomeSvg} alt="welcome" width={250} height={250}/>
+                    </div>
+                    <h1 className="text-5xl font-bold leading-tight p-4">Hello! Welcome to my Todo App.</h1>
+                    <p>I built this Todo App to demonstrate some of the possibilities of Next.js, Redux, tailwind,
+                        Clerk,
+                        and Framer Motion. Select which path to go down below. Use the app or use the demo?</p>
+                    <div>
+                        <HomePageButtons/>
+                    </div>
                 </div>
             </div>
         </>
