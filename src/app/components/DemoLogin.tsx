@@ -1,36 +1,41 @@
 'use client';
 import {useEffect, useState} from 'react';
-import {User} from "@clerk/backend";
-import {TodoItem} from "@/interface/types";
+import {useRouter} from "next/navigation";
+import {getCookie, setCookie} from "cookies-next";
 
-const header = ""
-const subheader = ""
+export const DemoLogin = ({users: users, authFlow: authFlow, originPath: originPath}: { users: Set<number>, authFlow: string, originPath: string }) => {
+    const router = useRouter();
 
-export const DemoLogin = ({users: users}: { users: string[] }) => {
     const [username, setUsername] = useState('');
-    const [storedUsers, setStoredUsers] = useState<string[]>([]);
-    const [highestUserId, setHighestUserId] = useState(0);
+    const [storedUsers, setStoredUsers] = useState(new Set<number>());
     const [lowestUserId, setLowestUserId] = useState(0);
+    const [highestUserId, setHighestUserId] = useState(0);
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [subheader, setSubheader] = useState('Type any password to login. Enter a number for the username.');
 
     useEffect(() => {
         setStoredUsers(users);
-        if (users.length === 0) {
+        let minUserId = Infinity;
+        let maxUserId = -Infinity;
+        if (users.size === 0) {
             return;
         }
-        users.entries().forEach(([key, value]) => {
-            if (value > highestUserId) {
-                setHighestUserId(key);
-            } else if (value < lowestUserId) {
-                setLowestUserId(key);
+        users.forEach((userId: number) => {
+            if (userId > maxUserId) {
+                maxUserId = userId;
+
             }
-        });
-        setSubheader(`Type any password to login. Enter a number between ${lowestUserId} and ${highestUserId} for the username.`);
-        console.log(users);
-        console.log(highestUserId);
-        console.log(lowestUserId);
+            if (userId < minUserId) {
+                minUserId = userId;
+            }
+        })
+        if (minUserId && maxUserId) {
+            setSubheader(`Type any password to login. Enter a number between ${minUserId} and ${maxUserId} for the username.`);
+        }
+
+        setLowestUserId(minUserId);
+        setHighestUserId(maxUserId);
 
     }, [users])
 
@@ -38,12 +43,37 @@ export const DemoLogin = ({users: users}: { users: string[] }) => {
         e.preventDefault();
         const userNum = parseInt(username, 10);
 
-        if (!userNum || userNum <= lowestUserId || userNum >= highestUserId) {
+        if (!userNum || !storedUsers.has(userNum)) {
             setErrorMessage(`Please enter a number between ${lowestUserId} and ${highestUserId} for the username.`);
         } else {
             setErrorMessage('');
-            // Simulate login success for demo
-            alert(`Logged in as User ${userNum}`);
+            fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?flow=${authFlow}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                })
+            }).then((response) => {
+                if (response.ok) {
+                    response.json().then((responseJson: {message: string, token: string}) => {
+                        alert(responseJson.message);
+                        console.log(responseJson.token);
+                        setCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY, responseJson.token, { maxAge: 60 * 60 * 24 * 7, path: '/' })
+                        console.log(getCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY));
+                        originPath = originPath || '/';
+                        setTimeout(() => {
+                            router.replace(`${originPath}?authFlow=${authFlow}`);
+                        }, 100); // 100ms delay
+                    });
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            })
         }
     };
 
@@ -67,7 +97,7 @@ export const DemoLogin = ({users: users}: { users: string[] }) => {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                placeholder="Enter a number for the username field."
+                                placeholder="Enter a number for the usernamefield."
                                 required
                             />
                         </div>

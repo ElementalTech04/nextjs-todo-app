@@ -10,7 +10,9 @@ const todoApiUrl = environment === AuthFlows.DEMO
 
 const getTodoData = async (req: Request): Promise<TodoItem[]> => {
     try {
-        const {userId} = new URL(req.url).searchParams;
+        const searchParams = new URL(req.url).searchParams;
+        const userId = searchParams.get('userId');
+        console.log(userId);
         const url = userId ? `${todoApiUrl}/user/${userId}/todos/` : `${todoApiUrl}/todos`;
         const response = await axios.get(url);
         return response.data;

@@ -1,37 +1,66 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import {NextApiRequest, NextApiResponse} from 'next';
 import jwt from 'jsonwebtoken';
-import { setCookie } from 'cookies-next';
-import { ClerkClient } from '@clerk/clerk-sdk-node';
+import {getCookie, setCookie} from 'cookies-next';
+import {NextRequest, NextResponse} from "next/server";
+import {AuthFlows, TodoItem} from "@/interface/types";
+import { v4 as uuidv4 } from 'uuid';
+import {cookies} from "next/headers";
 
 const DEMO_SECRET_KEY = process.env.DEMO_SECRET_KEY || 'supersecretkey';
 const JWT_EXPIRY = '1h';
 
 // Clerk authentication logic
-const authenticateWithClerk = async (req: NextApiRequest) => {
+const authenticateWithClerk = async (req: NextRequest): Promise<{
+    isAuthenticated: boolean,
+    user: any,
+    error?: string
+}> => {
     try {
-        const sessionToken = req.headers.authorization?.split(' ')[1];
-        const clerkUser = await ClerkClient.verifySessionToken(sessionToken);
-        return { isAuthenticated: true, user: clerkUser };
+        const sessionToken = req.headers.get('authorization')?.split(' ')[1];
+        // const clerkUser = await ClerkClient.verifySessionToken(sessionToken);
+        return {isAuthenticated: true, user: ''};
     } catch (error) {
-        return { isAuthenticated: false, error: 'Invalid token' };
+        return {isAuthenticated: false, user: undefined, error: 'Invalid token'};
     }
 };
 
 // Fake authentication for demo mode
-const authenticateWithDemo = (username: string, password: string) => {
+const authenticateWithDemo = async (username: string, password: string, authFlow: string) => {
     const userNumber = parseInt(username, 10);
-    if (isNaN(userNumber)) {
+
+    const totalTodoListResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/todo-api?flow=${authFlow}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+
+    const totalTodoList: TodoItem[] = await totalTodoListResponse.json();
+    let userList = new Set<number>();
+    totalTodoList.forEach((item: TodoItem) => {
+        userList.add(Number(item.userId));
+    });
+
+    if (!userList.has(userNumber) || isNaN(userNumber)) {
         throw new Error('Invalid username.');
     }
 
     // Create a fake JWT with username and password
-    const token = jwt.sign({ username, password }, DEMO_SECRET_KEY, { expiresIn: JWT_EXPIRY });
+    const token = jwt.sign({username, password}, DEMO_SECRET_KEY, {expiresIn: JWT_EXPIRY});
     return token;
 };
 
+const checkAuthStatus = (keyToken: string) => {
+    console.log(cookies());
+    const cookie = getCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY);
+    console.log(cookie)
+    console.log(keyToken)
+    return !!(cookie && cookie === keyToken);
+}
+
 // Set secure cookie
-const setAuthCookie = (res: NextApiResponse, token: string) => {
-    setCookie('tok-a-sym', token, {
+const setAuthCookie = (res: NextRequest, token: string) => {
+    setCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY, token, {
         req: res,
         res,
         httpOnly: true,
@@ -42,34 +71,49 @@ const setAuthCookie = (res: NextApiResponse, token: string) => {
     });
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { authFlow } = req.query;
-    const { username, password } = req.body;
+export async function GET(request: NextRequest) {
+    const searchParams = new URL(request.url).searchParams;
+    const keyToken = searchParams.get('token') || '';
+    // if (checkAuthStatus(keyToken)) {
+        return NextResponse.json({success: true});
+    // } else {
+    //     return NextResponse.json({success: false, error: 'No token found'});
+    // }
+}
+
+export async function POST(request: NextRequest) {
+    const searchParams = new URL(request.url).searchParams;
+    const {username, password} = await request.json();
+    const authFlow = searchParams.get('flow') || AuthFlows.DEMO;
 
     try {
-        // When authFlow is not demo, authenticate with Clerk
+        // TODO When authFlow is not demo, authenticate with Clerk
         if (authFlow !== 'demo') {
-            const authResult = await authenticateWithClerk(req);
+            const authResult: {
+                isAuthenticated: boolean,
+                user: any,
+                error?: string
+            } = await authenticateWithClerk(request);
             if (!authResult.isAuthenticated) {
-                return res.status(401).json({ error: 'Authentication failed' });
+                return NextResponse.json({error: 'Authentication failed'});
             }
 
-            // Set Clerk authentication token in cookie
-            setAuthCookie(res, authResult.user.sessionToken);
-            return res.status(200).json({ message: 'Authenticated with Clerk', user: authResult.user });
+            return NextResponse.json({message: 'Authenticated with Clerk', user: authResult.user});
         }
 
         if (!username || !password) {
-            return res.status(400).json({ error: 'Username and password are required in demo mode' });
+            return NextResponse.json({error: 'Username and password are required in demo mode'});
         }
 
-        // Authenticate in demo mode and generate a fake JWT
-        const demoToken = authenticateWithDemo(username, password);
-        setAuthCookie(res, demoToken);
+        // Authenticate in demo mode and generate a fake JWT if not already authenticated
+        const demoToken = await authenticateWithDemo(username, password, authFlow);
 
-        return res.status(200).json({ message: 'Authenticated in demo mode', token: demoToken });
+        setAuthCookie(request, demoToken);
+        return NextResponse.json({message: 'Authenticated in demo mode', token: demoToken});
 
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error(error);
+        return NextResponse.json({error: error.message});
     }
 }
+
