@@ -8,12 +8,22 @@ export enum AuthFlows {
 export interface TodoItem {
     id: string;
     title: string;
+    order: number;
     completed: boolean;
     userId: string;
     projectId?: string;
-    priority?: string;
+    priority?: 0 | 1 | 2 | 3;
     description?: string;
-    dueDate?: string;
+    dueDate?: Date;
+    startDate?: Date;
     status?: string;
     subTasks?: TodoItem[];
+}
+
+
+export interface TodoState {
+    todos: TodoItem[];
+    loading: boolean;
+    error: Error | null;
+
 }

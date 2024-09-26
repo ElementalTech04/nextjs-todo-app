@@ -74,11 +74,11 @@ const setAuthCookie = (res: NextRequest, token: string) => {
 export async function GET(request: NextRequest) {
     const searchParams = new URL(request.url).searchParams;
     const keyToken = searchParams.get('token') || '';
-    // if (checkAuthStatus(keyToken)) {
-        return NextResponse.json({success: true});
-    // } else {
-    //     return NextResponse.json({success: false, error: 'No token found'});
-    // }
+    if (keyToken) {
+        return NextResponse.json({success: true} );
+    } else {
+        return NextResponse.json({success: false, error: 'No token found'});
+    }
 }
 
 export async function POST(request: NextRequest) {

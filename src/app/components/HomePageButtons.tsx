@@ -20,7 +20,7 @@ export const HomePageButtons = () => {
     };
     return (
         <>
-            <div className="flex justify-center items-center p-24">
+            <div className="flex justify-center items-center p-[2rem]">
             <button className="bg-darkGreen hover:bg-yellow hover:text-black text-white font-bold py-2 px-4 rounded-lg shadow-lg transition ease-in-out duration-200 m-5"
                     onClick={handleAppRedirect}>Use the App
             </button>

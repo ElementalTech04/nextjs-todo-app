@@ -8,7 +8,7 @@ export function HomePage() {
 
     return (
         <>
-            <div className="grid grid-cols-[1fr 2fr 1fr] grid-rows-4 gap-4 h-screen p-4">
+            <div className="grid grid-cols-[1fr 2fr 1fr] grid-rows-4 gap-4 h-screen m-4">
                 <div className="row-span-full bg-gray-700 rounded-lg w-full h-full p-6 text-center p-24">
                     <div className="col-span-2 row-start-1 row-end-2 flex items-center justify-center F">
                         <Image src={welcomeSvg} alt="welcome" width={250} height={250}/>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {AuthFlows, TodoItem} from '@/interface/types';
 import {NextRequest, NextResponse} from "next/server";
+import jwt from "jsonwebtoken";
 
 const environment = process.env.ENVIRONMENT;
 
@@ -10,8 +11,9 @@ const todoApiUrl = environment === AuthFlows.DEMO
 
 const getTodoData = async (req: Request): Promise<TodoItem[]> => {
     try {
-        const searchParams = new URL(req.url).searchParams;
-        const userId = searchParams.get('userId');
+        const authToken = req.headers.get('Authorization')?.split(' ')[1];
+        const tokenDetails = jwt.decode(authToken);
+        const userId = tokenDetails?.userId;
         console.log(userId);
         const url = userId ? `${todoApiUrl}/user/${userId}/todos/` : `${todoApiUrl}/todos`;
         const response = await axios.get(url);
