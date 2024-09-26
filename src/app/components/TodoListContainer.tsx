@@ -6,13 +6,22 @@ import {TodoItem,} from "@/interface/types";
 import {Droppable} from "react-beautiful-dnd";
 import {useSelector} from "react-redux";
 import {RootState} from "@/app/store/store";
+import "../../styles/scroll.css";
+
+const filterTodos = (todos: TodoItem[], isCompleted: boolean) => todos.filter((todo: TodoItem) => todo.completed === isCompleted)
+
 
 export const TodoListContainer = ({isCompletedList: isCompletedList}: {
     isCompletedList: boolean
 }) => {
     const todos: TodoItem[] = useSelector((state: RootState) => state.todos.todos);
 
-    const filteredTodos = todos.filter((todo: TodoItem) => todo.completed === isCompletedList)
+    let filteredTodos = filterTodos(todos, isCompletedList)
+
+    useEffect(() => {
+        filteredTodos = filterTodos(todos, isCompletedList)
+    }, [todos])
+
     return (
         <>
             <Droppable droppableId={isCompletedList ? "completed" : "inProgress"}>

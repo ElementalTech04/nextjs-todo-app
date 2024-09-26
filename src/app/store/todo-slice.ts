@@ -9,21 +9,6 @@ const initialState: TodoState = {
     error: null,
 };
 
-// Utility method to update object with differences between two objects
-const updateObjectWithDifferences = (objA: any, objB: any) => {
-    for (const key in objB) {
-        if (objB.hasOwnProperty(key)) {
-            if (typeof objB[key] === 'object' && !Array.isArray(objB[key]) && objB[key] !== null) {
-                // If the property is an object, perform deep merge
-                objA[key] = updateObjectWithDifferences(objA[key] || {}, objB[key]);
-            } else if (objA[key] !== objB[key]) {
-                // Update objA if values are different or if the key doesn't exist in objA
-                objA[key] = objB[key];
-            }
-        }
-    }
-    return objA;
-}
 
 const todoSlice = createSlice({
     name: 'todos',
@@ -46,10 +31,13 @@ const todoSlice = createSlice({
             const [movedTask] = state.todos.splice(sourceIndex, 1);
             state.todos.splice(destinationIndex, 0, movedTask);
         },
-        modifyTodo: (state, action: PayloadAction<TodoItem>) => {
-            const todo = state.todos.find((todo: TodoItem) => todo.id === action.payload.id);
-            if (todo) {
-                 updateObjectWithDifferences(todo, action.payload);
+        updateTodo: (state, action) => {
+            const index = state.todos.findIndex(todo => todo.id === action.payload.id);
+            if (index !== -1) {
+                state.todos[index] = {
+                    ...state.todos[index],
+                    ...action.payload,
+                };
             }
         },
         removeTodo: (state, action: PayloadAction<string>) => {
@@ -59,5 +47,5 @@ const todoSlice = createSlice({
 });
 
 export const { addTodo, setTodos, toggleTodo,
-    reorderTasks,modifyTodo, removeTodo } = todoSlice.actions;
+    reorderTasks,updateTodo, removeTodo } = todoSlice.actions;
 export default todoSlice.reducer;
