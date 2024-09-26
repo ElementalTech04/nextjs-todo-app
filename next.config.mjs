@@ -9,6 +9,7 @@ const nextConfig = {
         // Define your environment variables here for server-side access
         ENVIRONMENT: process.env.ENVIRONMENT,
     },
+    output: 'export',
 };
 
 export default nextConfig;
