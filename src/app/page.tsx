@@ -3,7 +3,7 @@ import {HomePageButtons} from "@/app/components/HomePageButtons";
 import welcomeSvg from "@/assets/images/welcome.svg";
 import Image from "next/image";
 
-export function HomePage() {
+export default function HomePage() {
 
 
     return (
@@ -28,9 +28,3 @@ export function HomePage() {
         </>
     );
 }
-
-HomePage.getInitialProps = async ({query, req, asPath}) => {
-    throw new Error('Application is crashing without catch');
-}
-
-export default HomePage;

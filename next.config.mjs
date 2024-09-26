@@ -9,7 +9,10 @@ const nextConfig = {
         // Define your environment variables here for server-side access
         ENVIRONMENT: process.env.ENVIRONMENT,
     },
-    output: 'export',
+    experimental: {
+        runtime: 'edge',
+        appDir: true,
+    },
 };
 
 export default nextConfig;

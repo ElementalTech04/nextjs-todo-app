@@ -60,7 +60,7 @@ export const DemoLogin = ({users: users, authFlow: authFlow, originPath: originP
                 if (response.ok) {
                     response.json().then((responseJson: {message: string, token: string}) => {
                         alert(responseJson.message);
-                        setCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY, responseJson.token, { maxAge: 60 * 60 * 24 * 7, path: '/' })
+                        setCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token', responseJson.token, { maxAge: 60 * 60 * 24 * 7, path: '/' })
                         originPath = originPath || '/';
                         setTimeout(() => {
                             router.replace(`${originPath}?authFlow=${authFlow}`);

@@ -1,10 +1,7 @@
-import {NextApiRequest, NextApiResponse} from 'next';
 import jwt from 'jsonwebtoken';
 import {getCookie, setCookie} from 'cookies-next';
 import {NextRequest, NextResponse} from "next/server";
 import {AuthFlows, TodoItem} from "@/interface/types";
-import { v4 as uuidv4 } from 'uuid';
-import {cookies} from "next/headers";
 
 const DEMO_SECRET_KEY = process.env.DEMO_SECRET_KEY || 'supersecretkey';
 const JWT_EXPIRY = '1h';
@@ -36,7 +33,7 @@ const authenticateWithDemo = async (username: string, password: string, authFlow
     })
 
     const totalTodoList: TodoItem[] = await totalTodoListResponse.json();
-    let userList = new Set<number>();
+    const userList = new Set<number>();
     totalTodoList.forEach((item: TodoItem) => {
         userList.add(Number(item.userId));
     });
@@ -51,18 +48,17 @@ const authenticateWithDemo = async (username: string, password: string, authFlow
 };
 
 const checkAuthStatus = (keyToken: string) => {
-    const cookie = getCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY);
+    const cookie = getCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token');
     return !!(cookie && cookie === keyToken);
 }
 
 // Set secure cookie
 const setAuthCookie = (res: NextRequest, token: string) => {
-    setCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY, token, {
-        req: res,
-        res,
+    // @ts-ignore
+    setCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token', token, { req: res, res,
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Strict',  // Prevent CSRF attacks
+        sameSite: 'strict',  // Prevent CSRF attacks
         maxAge: 60 * 60,     // 1 hour expiry
         path: '/',           // Available throughout the app
     });
@@ -108,7 +104,7 @@ export async function POST(request: NextRequest) {
         setAuthCookie(request, demoToken);
         return NextResponse.json({message: 'Authenticated in demo mode', token: demoToken});
 
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
         return NextResponse.json({error: error.message});
     }

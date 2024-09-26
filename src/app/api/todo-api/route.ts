@@ -11,9 +11,9 @@ const todoApiUrl = environment === AuthFlows.DEMO
 
 const getTodoData = async (req: Request): Promise<TodoItem[]> => {
     try {
-        const authToken = req.headers.get('Authorization')?.split(' ')[1];
-        const tokenDetails = jwt.decode(authToken);
-        const userId = tokenDetails?.userId;
+        const authToken: string = req.headers.get('Authorization')?.split(' ')[1] || '';
+        const tokenDetails: any = jwt.decode(authToken);
+        const userId = tokenDetails?.username;
         const url = userId ? `${todoApiUrl}/user/${userId}/todos/` : `${todoApiUrl}/todos`;
         const response = await axios.get(url);
         return response.data;
@@ -81,11 +81,11 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-    const {id} = new URL(request.url).searchParams;
-    if (!id) {
+    const content = await request.json();
+    if (!content || !content.id) {
         return NextResponse.json({error: 'ID is required for deletion'});
     }
-    await deleteTodoData(id);
+    await deleteTodoData(content.id);
     return NextResponse.json({success: true});
 
 }
