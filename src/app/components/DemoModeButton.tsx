@@ -1,7 +1,7 @@
 'use client';
 
 import React from "react";
-import {redirect, useRouter} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {AuthFlows} from "@/interface/types";
 import {SimpleButton} from "@/app/components/SimpleButton";
 

@@ -1,7 +1,7 @@
 'use client';
 import {useEffect, useState} from 'react';
 import {useRouter} from "next/navigation";
-import {getCookie, setCookie} from "cookies-next";
+import {setCookie} from "cookies-next";
 
 export const DemoLogin = ({users: users, authFlow: authFlow, originPath: originPath}: { users: Set<number>, authFlow: string, originPath: string }) => {
     const router = useRouter();

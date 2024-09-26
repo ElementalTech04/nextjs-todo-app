@@ -1,14 +1,10 @@
 import React from 'react';
 import {AuthFlows, TodoItem} from '@/interface/types';
 import {cookies} from 'next/headers';
-import logoutSvg from '@/assets/images/account-in-person-user-group-people.svg';
 import {TodoListContainer} from '@/app/components/TodoListContainer';
 import {redirect} from 'next/navigation';
-import {IconButton} from "@/app/components/IconButton";
-import {SimpleButton} from "@/app/components/SimpleButton";
 import {LogoutButton} from "@/app/components/LogoutButton";
 import {DemoModeButton} from "@/app/components/DemoModeButton";
-import TodoProvider from "@/app/components/TodoProvider";
 import {TodoListProviderContext} from "@/app/components/TodoListProviderContext";
 
 export default async function TodoPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
