@@ -14,7 +14,6 @@ const getTodoData = async (req: Request): Promise<TodoItem[]> => {
         const authToken = req.headers.get('Authorization')?.split(' ')[1];
         const tokenDetails = jwt.decode(authToken);
         const userId = tokenDetails?.userId;
-        console.log(userId);
         const url = userId ? `${todoApiUrl}/user/${userId}/todos/` : `${todoApiUrl}/todos`;
         const response = await axios.get(url);
         return response.data;

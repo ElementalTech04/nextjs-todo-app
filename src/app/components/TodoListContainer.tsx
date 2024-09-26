@@ -1,46 +1,57 @@
 'use client';
 
-import React, {useEffect, useRef} from "react";
-import TodoListItem from "@/app/components/TodoListItem";
-import {TodoItem,} from "@/interface/types";
-import {Droppable} from "react-beautiful-dnd";
-import {useSelector} from "react-redux";
-import {RootState} from "@/app/store/store";
-import "../../styles/scroll.css";
 
-const filterTodos = (todos: TodoItem[], isCompleted: boolean) => todos.filter((todo: TodoItem) => todo.completed === isCompleted)
+import {useDispatch} from "react-redux";
+import {DragDropContext, DropResult} from "react-beautiful-dnd";
+import {TodoList} from "@/app/components/TodoList";
+import React, {useEffect} from "react";
+import {TodoItem} from "@/interface/types";
+import {reorderTasks, setTodos} from "@/app/store/todo-slice";
 
 
-export const TodoListContainer = ({isCompletedList: isCompletedList}: {
-    isCompletedList: boolean
-}) => {
-    const todos: TodoItem[] = useSelector((state: RootState) => state.todos.todos);
+export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: TodoItem[] }) => {
+    const dispatch = useDispatch();
 
-    let filteredTodos = filterTodos(todos, isCompletedList)
+    const handleOnDragStart = (result: { draggableId: string }) => {
+        console.log("start drag", result);
+    }
+
+    const handleOnDragEnd = (result: DropResult) => {
+        const {source, destination} = result;
+
+        // If dropped outside of a droppable area, do nothing
+        if (!destination) return;
+
+        // Dispatch reorder action
+        dispatch(reorderTasks({
+            sourceIndex: source.index,
+            destinationIndex: destination.index,
+        }));
+    };
 
     useEffect(() => {
-        filteredTodos = filterTodos(todos, isCompletedList)
-    }, [todos])
+        if (initialTodos) {
+            dispatch(setTodos(initialTodos));
+        }
+    }, [initialTodos]);
 
     return (
         <>
-            <Droppable droppableId={isCompletedList ? "completed" : "inProgress"}>
-                {(provided, snapshot) => (
-                    <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className="w-full p-4 shadow-md h-[80%] overflow-y-scroll no-scrollbar">
-                        {
-                            filteredTodos.map((todo: TodoItem, index: number) => (
-                                <div key={index}>
-                                    <TodoListItem todoItem={todo} index={index}/>
-                                </div>
-                            ))
-                        }
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
+            <div className="flex flex-wrap justify-between h-[100%]">
+                <DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleOnDragStart}>
+                    <section className="bg-black p-4 rounded-lg w-[48%] h-[100%]">
+                        <h1 className="text-3xl align-left font-bold">In Progress</h1>
+                        <hr className="my-4 border-gray-300"/>
+                        <TodoList isCompletedList={false}/>
+                    </section>
+                    <section className="bg-black p-4 rounded-lg w-[48%] h-[100%]">
+                        <h1 className="text-3xl align-left font-bold">Completed</h1>
+                        <hr className="my-4 border-gray-300"/>
+                        <TodoList isCompletedList={true}/>
+                    </section>
+                </DragDropContext>
+            </div>
+
         </>
-    )
+    );
 }

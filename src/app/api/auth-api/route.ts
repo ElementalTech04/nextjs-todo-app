@@ -51,10 +51,7 @@ const authenticateWithDemo = async (username: string, password: string, authFlow
 };
 
 const checkAuthStatus = (keyToken: string) => {
-    console.log(cookies());
     const cookie = getCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY);
-    console.log(cookie)
-    console.log(keyToken)
     return !!(cookie && cookie === keyToken);
 }
 

@@ -29,3 +29,8 @@ export interface TodoState {
     error: Error | null;
 
 }
+
+export type TodoListColumnProps = {
+    isCompletedList: boolean;
+    title: string;
+}
