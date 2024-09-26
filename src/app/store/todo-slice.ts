@@ -3,6 +3,8 @@ import {TodoItem, TodoState} from "@/interface/types";
 
 const initialState: TodoState = {
     todos: [],
+    completedCount: 0,
+    incompleteCount: 0,
     loading: false,
     error: null,
 };
@@ -30,7 +32,7 @@ const todoSlice = createSlice({
         addTodo: (state, action: PayloadAction<TodoItem>) => {
             state.todos.push({ ...action.payload, completed: false });
         },
-        addTodoBatch: (state, action: PayloadAction<TodoItem[]>) => {
+        setTodos: (state, action: PayloadAction<TodoItem[]>) => {
             state.todos = action.payload
         },
         toggleTodo: (state, action: PayloadAction<string>) => {
@@ -56,6 +58,6 @@ const todoSlice = createSlice({
     },
 });
 
-export const { addTodo, addTodoBatch, toggleTodo,
+export const { addTodo, setTodos, toggleTodo,
     reorderTasks,modifyTodo, removeTodo } = todoSlice.actions;
 export default todoSlice.reducer;

@@ -1,6 +1,5 @@
 'use client';
 import {TodoItem} from "@/interface/types";
-import {useEffect, useState} from "react";
 import {Draggable} from "react-beautiful-dnd";
 
 export default function TodoListItem({todoItem: todoItem, index: index}: { todoItem: TodoItem, index: number }) {
@@ -27,14 +26,20 @@ export default function TodoListItem({todoItem: todoItem, index: index}: { todoI
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     style={provided.draggableProps.style}
-                    className="grid grid-cols-4 grid-rows-4 space-x-4 bg-white p-3 rounded-lg shadow-md mb-4 text-black">
+                    className="grid grid-cols-4 grid-rows-3 space-x-4 bg-white p-5 rounded-lg shadow-md mb-5 text-black text-left">
                     {/* Priority Icon (circle) */}
-                    <div className={`col-span-1 row-span-1 h-8 w-8 rounded-full ${getPriorityColor()}`}/>
+                    {/*<div className={`col-span-1 row-span-1 h-8 w-8 rounded-full ${getPriorityColor()}`}/>*/}
 
                     {/* Task Information */}
-                    <div className="col-start-2 col-end-4 row-span-2 flex-grow">
-                        <h3 className="text-2xl font-bold">{todoItem?.title}</h3>
-                        <p className="text-gray-600">{todoItem?.description}</p>
+                    <div className="col-span-5 row-span-2 flex-grow">
+                        <h3 className="text-3xl text m-3 tracking-wide">
+                            <span className="font-bold " >Title: </span>
+                            {todoItem?.title}
+                        </h3>
+                        <p className="text-gray-600 m-4 tracking-wide">
+                            <span className="font-bold" >Description: </span>
+                            {todoItem?.description}
+                        </p>
                     </div>
                 </div>
             )}

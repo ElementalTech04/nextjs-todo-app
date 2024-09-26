@@ -4,9 +4,9 @@ import {useRouter, useSearchParams} from 'next/navigation';  // Import redirect 
 import React, {useEffect} from 'react';
 import {TodoListContainer} from '@/app/components/TodoListContainer';
 import {AuthFlows} from '@/interface/types';
-import {getCookie} from "cookies-next";
+import {getCookie, setCookie} from "cookies-next";
 import {useDispatch, useSelector} from "react-redux";
-import {addTodoBatch, reorderTasks} from "@/app/store/todo-slice";
+import {reorderTasks, setTodos} from "@/app/store/todo-slice";
 import logoutSvg from '@/assets/images/account-in-person-user-group-people.svg';
 import Image from 'next/image';
 import {DragDropContext, DropResult} from "react-beautiful-dnd";
@@ -20,11 +20,10 @@ export default function TodoPage() {
     const searchParams = useSearchParams();
     const dispatch = useDispatch();
     const authFlow = searchParams.get('flow') || AuthFlows.DEMO
-    const {todos, loading, error} = useSelector(todosSelector);
     const loginUrl = `/auth/login?authFlow=${authFlow}&originPath=/todo`;
 
     // Get JWT for backend authentication
-    const authToken = getCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || '') || "";
+    const authToken = getCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token') || "";
 
     // Fail fast if no auth token is found
     if (!authToken) {
@@ -58,8 +57,14 @@ export default function TodoPage() {
         }
     }
 
+    const logout = () => {
+        setCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token', null);
+        console.log("logout");
+        router.replace(`/auth/login?flow=${AuthFlows.DEMO}`);
+    }
+
     const handleOnDragStart = (result: { draggableId: string }) => {
-        console.log(result);
+        console.log("start drag", result);
     }
 
     const handleOnDragEnd = (result: DropResult) => {
@@ -76,14 +81,13 @@ export default function TodoPage() {
     };
 
     useEffect(() => {
-        console.log('useEffect');
         // when the UI refreshes, check authentication status and fetch todo data
         if (!checkAuthStatus()) {
             router.push(loginUrl);
         } else {
             fetchTodoData().then(response => {
                 if (response) {
-                    dispatch(addTodoBatch(response));
+                    dispatch(setTodos(response));
                 }
             });
         }
@@ -109,6 +113,7 @@ export default function TodoPage() {
                     className="col-span-4 row-span-1 bg-black p-5 text-center rounded-lg grid grid-cols-10 grid-rows-2">
                     <h1 className="col-span-10 row-span-1 text-6xl font-bold">My To-Do List</h1>
                     <button
+                        onClick={logout}
                         className="col-span-10 row-span-2 justify-self-end hover:scale-110 transition-all flex items-center flex-col">
                         <Image src={logoutSvg} alt="logout" width={35} height={35}/>
                         <p>Logout</p>
@@ -117,12 +122,12 @@ export default function TodoPage() {
                 <section className="col-start-1 col-end-3 row-span-4 bg-black p-4 rounded-lg">
                     <h1 className="text-3xl align-left font-bold">In Progress</h1>
                     <hr className="my-4 border-gray-300"/>
-                    <TodoListContainer droppableId="inProgress" isCompletedList={false}/>
+                    <TodoListContainer isCompletedList={false}/>
                 </section>
                 <section className="col-start-3 col-end-5 row-span-4 bg-black p-4 rounded-lg">
                     <h1 className="text-3xl align-left font-bold">Completed</h1>
                     <hr className="my-4 border-gray-300"/>
-                    <TodoListContainer droppableId="completed" isCompletedList={true}/>
+                    <TodoListContainer isCompletedList={true}/>
                 </section>
             </div>
         </DragDropContext>
