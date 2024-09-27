@@ -1,32 +1,164 @@
-# Todo App
-### Introduction
-This is a Todo App built with Next.js, Redux, Tailwind, Clerk, and Framer Motion.
+# Next JS Todo Web App
 
-### Getting Started
+## Description
 
-First, run the development server:
+The **Next JS Todo Web App** is a monolithic to-do list application built using modern web technologies. The app leverages **Next.js** for the frontend and backend, **Tailwind CSS** for styling, **Clerk** for authentication, **Redux** for global state management, **Framer Motion** for animations, and **React Beautiful DND** for drag-and-drop functionality. This project also includes a **demo mode**, originally built for an employment opportunity submission.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+The application is fully responsive and designed to deliver a smooth user experience with stable widgets and interactive features.
+
+## Features
+
+- **Authentication**: Secure user sign-in and sign-out using Clerk. Demo Mode uses users that are mentioned in the fetched mock data and updates the user with a numerical username range that can be used against the data.
+- **Task Management**: Add, modify, and rearrange to-do tasks with smooth drag-and-drop interactions.
+- **Demo Mode**: Experience the application without signing up. Perfect for quick showcases.
+- **Animations**: Enhanced user experience with smooth transitions using Framer Motion.
+- **Backend**: Built with Next.js API Routes, handling all the business logic on the server side.
+
+## Using Demo Mode
+
+To use demo mode:
+
+- Click on the "Demo Mode" button on the homepage.
+- Enter any number in the displayed range as your username and any characters for the password.
+- You will be redirected to the dashboard, where you can test the drag-and-drop functionality and log out at any time.
+
+
+## File Structure
+
+Here’s a simplified tree of the key files in the project:
+
+```
+  ├── src/ 
+  │ ├── app/ 
+  | | ├── api/
+  | | |  ├── auth-api./
+  | | |  ├── todo-api/
+  │ │ ├── components/ 
+  │ │ │ ├── TodoListContainer.tsx 
+  │ │ │ ├── TodoListItem.tsx 
+  │ │ └── pages/ 
+  │ │ ├── auth/ 
+  │ │ ├── todo/ 
+  │ │ │ ├── page.tsx 
+  │ │ └── index.tsx 
+  │ ├── interface/ 
+  │ ├── store/ 
+  │ ├── assets/ 
+  ├── public/ 
+  ├── styles/ 
+  ├── next.config.js 
+  ├── tailwind.config.ts 
+  └── package.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How It Works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The Next JS Todo Web App is designed for ease of use and simplicity in managing your to-do lists. Here’s a breakdown of the core features:
 
-### Learn More
+1. **User Authentication**: Users can sign up, log in, and log out using Clerk. Upon successful authentication, users are redirected to the dashboard, where they can manage their to-do tasks.
 
-To learn more about Next.js, take a look at the following resources:
+2. **Task Management**: Users can:
+    - **Add new tasks** by clicking the "Add Task" button.
+    - **Modify tasks** by selecting any existing task.
+    - **Rearrange tasks** using drag-and-drop functionality provided by **React Beautiful DND**.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Demo Mode**:
+    - To explore the app without creating an account, users can activate **Demo Mode** by clicking the "Demo Mode" button.
+    - Enter any number (within the displayed range) for the login ID and any characters for the password.
+    - Upon login, you will be redirected to the dashboard where you can rearrange tasks and log out.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Animations**: Smooth, responsive animations are implemented using **Framer Motion** to enhance the user experience when interacting with tasks.
+
+## Stable Widgets
+
+The app includes the following stable widgets:
+- **Todo List Container**: A well-optimized, stable container that holds and manages the state of all to-do tasks.
+- **Drag-and-Drop Task Reordering**: A feature that enables users to rearrange tasks without performance hiccups, using **React Beautiful DND**.
+- **User Authentication Flow**: A fully integrated user authentication flow powered by Clerk that securely handles user credentials and sessions.
+
+## Running the Project Locally
+
+To run this project locally, follow these steps:
+
+### Prerequisites
+
+Ensure you have the following installed on your machine:
+
+- **Node.js** (v14 or higher)
+- **npm** or **yarn**
+- **Clerk** account for managing authentication
+
+### Steps
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/yourusername/nextjs-todo-app.git
+   cd nextjs-todo-app
+    ```
+   ## Running the Project Locally
+
+To run this project locally, follow these steps:
+
+### Prerequisites
+
+Ensure you have the following installed on your machine:
+
+- **Node.js** (v14 or higher)
+- **npm** or **yarn**
+- **Clerk** account for managing authentication
+
+### Steps
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/yourusername/nextjs-todo-app.git
+   cd nextjs-todo-app
+   ```
+
+2. **Install dependencies:**
+
+   Using npm:
+
+   ```bash
+   npm install
+   ```
+
+   Or using yarn:
+
+   ```bash
+   yarn install
+   ```
+
+3. **Set up environment variables:**
+
+   Create a `.env.local` file in the root directory and configure the required environment variables:
+
+   ```bash
+   NEXT_PUBLIC_CLERK_FRONTEND_API=<your_clerk_frontend_api>
+   NEXT_PUBLIC_CLERK_API_KEY=<your_clerk_api_key>
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+   NEXT_PUBLIC_AUTH_TOKEN_KEY=<auth_token_key>
+   ```
+
+4. **Run the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+   Or:
+
+   ```bash
+   yarn dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
+
+## Future Enhancements
+
+- **Full Todo List Functionality**: In the near future, I will add the rest of the core functionality, such as marking tasks as completed, deleting tasks, and adding notes to tasks. For now, there is a demo mode that allows you to test the drag-and-drop functionality.
+- **Persistent Task Storage**: Integration with a database to persist tasks across sessions.
+- **Mobile Optimizations**: Further UI/UX improvements for mobile devices.
