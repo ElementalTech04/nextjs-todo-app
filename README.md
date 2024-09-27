@@ -1,5 +1,5 @@
 # Next JS Todo Web App
-
+**version 0.2.0**
 ## Description
 
 The **Next JS Todo Web App** is a monolithic to-do list application built using modern web technologies. The app leverages **Next.js** for the frontend and backend, **Tailwind CSS** for styling, **Clerk** for authentication, **Redux** for global state management, **Framer Motion** for animations, and **React Beautiful DND** for drag-and-drop functionality. This project also includes a **demo mode**, originally built for an employment opportunity submission.
@@ -32,22 +32,22 @@ Here’s a simplified tree of the key files in the project:
 ```
   ├── src/ 
   │ ├── app/ 
-  | | ├── api/
-  | | |  ├── auth-api./
-  | | |  ├── todo-api/
+  │ │ ├── api/
+  │ │ │  ├── auth-api/ (api for authentication)
+  │ │ │  ├── todo-api/ (api for to-do management and connecting to jsonplaceholder for mock data)
   │ │ ├── components/ 
   │ │ │ ├── TodoListContainer.tsx 
   │ │ │ ├── TodoListItem.tsx 
-  │ │ └── pages/ 
-  │ │ ├── auth/ 
-  │ │ ├── todo/ 
+  │ │ │ ├── TodoList.tsx 
+  │ │ │ ├── TodoProvider.tsx (For Redux)(For Redux)
+  │ │ ├── auth/  (Authentication pages)
+  │ │ ├── store/ (Redux store)
+  │ │ ├── todo/ (To-do pages)
   │ │ │ ├── page.tsx 
   │ │ └── index.tsx 
-  │ ├── interface/ 
-  │ ├── store/ 
-  │ ├── assets/ 
-  ├── public/ 
-  ├── styles/ 
+  │ ├── interface/ (types)
+  │ ├── assets/ (static assets)
+  │ ├── styles/ 
   ├── next.config.js 
   ├── tailwind.config.ts 
   └── package.json
