@@ -5,8 +5,6 @@
 
 The **Next.js Todo Web App** is a monolithic to-do list application built using modern web technologies. The app leverages **Next.js** for the frontend and backend, **Tailwind CSS** for styling, **Clerk** for authentication, **Redux** for global state management, **Framer Motion** for animations, and **React Beautiful DND** for drag-and-drop functionality. This project also includes a **demo mode**, originally built for an employment opportunity submission.
 
-The application is fully responsive and designed to deliver a smooth user experience with stable widgets and interactive features.
-
 ## Features
 
 - **Authentication**: Secure user sign-in and sign-out using Clerk. Demo Mode uses users that are mentioned in the fetched mock data and updates the user with a numerical username range that can be used against the data.
