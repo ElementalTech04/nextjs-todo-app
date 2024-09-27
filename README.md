@@ -87,7 +87,7 @@ To run this project locally, follow these steps:
 
 Ensure you have the following installed on your machine:
 
-- **Node.js** (v14 or higher)
+- **Node.js** (v16 or higher)
 - **npm** or **yarn**
 - **Clerk** account for managing authentication
 
@@ -107,7 +107,7 @@ To run this project locally, follow these steps:
 
 Ensure you have the following installed on your machine:
 
-- **Node.js** (v14 or higher)
+- **Node.js** (v16 or higher)
 - **npm** or **yarn**
 - **Clerk** account for managing authentication
 
