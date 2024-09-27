@@ -16,6 +16,8 @@ The application is fully responsive and designed to deliver a smooth user experi
 
 ## Using Demo Mode
 
+**This app will be deployed on Cloudflare Pages soon and this readme will be updated with links to the live site.**
+
 To use demo mode:
 
 - Click on the "Demo Mode" button on the homepage.
