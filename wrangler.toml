@@ -1,9 +1,0 @@
-name = "nextjs-todo-app"
-main = "./.vercel/output/static/worker.js"
-compatibility_date = "2023-09-26"  # Use the current date
-
-[build]
-command = "npm run build"
-
-[vars]
-# Add any environment variables your application requires

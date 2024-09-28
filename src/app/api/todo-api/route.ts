@@ -3,18 +3,18 @@ import {AuthFlows, TodoItem} from '@/interface/types';
 import {NextRequest, NextResponse} from "next/server";
 import jwt from "jsonwebtoken";
 
-const environment = process.env.ENVIRONMENT;
 
-const todoApiUrl = environment === AuthFlows.DEMO
+const todoApiUrl = (flow: string) => flow === AuthFlows.DEMO
     ? process.env.MOCK_DATA_API_URL
     : process.env.CHRONICLE_API_GATEWAY;
 
-const getTodoData = async (req: Request): Promise<TodoItem[]> => {
+const getTodoData = async (authHeader: string, flow: string): Promise<TodoItem[]> => {
     try {
-        const authToken: string = req.headers.get('Authorization')?.split(' ')[1] || '';
+        const authToken: string =authHeader?.split(' ')[1] || '';
         const tokenDetails: any = jwt.decode(authToken);
+        const apiUrl = todoApiUrl(flow);
         const userId = tokenDetails?.username;
-        const url = userId ? `${todoApiUrl}/user/${userId}/todos/` : `${todoApiUrl}/todos`;
+        const url = userId ? `${apiUrl}/user/${userId}/todos/` : `${apiUrl}/todos`;
         const response = await axios.get(url);
         return response.data;
     } catch (error) {
@@ -22,8 +22,8 @@ const getTodoData = async (req: Request): Promise<TodoItem[]> => {
     }
 };
 
-const createTodoData = async (content: TodoItem): Promise<TodoItem> => {
-    if(environment === AuthFlows.DEMO) {
+const createTodoData = async (content: TodoItem, flow: string): Promise<TodoItem> => {
+    if(flow === AuthFlows.DEMO) {
         return content;
     }
     try {
@@ -34,8 +34,8 @@ const createTodoData = async (content: TodoItem): Promise<TodoItem> => {
     }
 };
 
-const saveTodoData = async (content: TodoItem): Promise<TodoItem> => {
-    if(environment === AuthFlows.DEMO) {
+const saveTodoData = async (content: TodoItem, flow: string): Promise<TodoItem> => {
+    if(flow === AuthFlows.DEMO) {
         return content;
     }
     try {
@@ -46,8 +46,8 @@ const saveTodoData = async (content: TodoItem): Promise<TodoItem> => {
     }
 };
 
-const deleteTodoData = async (id: string | string[] | undefined): Promise<void> => {
-    if(environment === AuthFlows.DEMO) {
+const deleteTodoData = async (id: string | string[] | undefined, flow: string): Promise<void> => {
+    if(flow === AuthFlows.DEMO) {
         return;
     }
     try {
@@ -58,7 +58,7 @@ const deleteTodoData = async (id: string | string[] | undefined): Promise<void> 
 };
 
 export async function GET(request: NextRequest) {
-    const todos = await getTodoData(request);
+    const todos = await getTodoData(request.headers.get('Authorization') || '', new URL(request.url).searchParams.get('flow') || AuthFlows.DEMO);
     return NextResponse.json(todos);
 }
 
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     if (!content) {
         return NextResponse.json({error: 'Content is required'});
     }
-    const newTodoData = await createTodoData(content);
+    const newTodoData = await createTodoData(content, new URL(request.url).searchParams.get('flow') || AuthFlows.DEMO);
     return NextResponse.json(newTodoData);
 }
 
@@ -76,7 +76,7 @@ export async function PUT(request: NextRequest) {
     if (!content || !content.id) {
         return NextResponse.json({error: 'Content is required'});
     }
-    const updatedTodoData = await saveTodoData(content);
+    const updatedTodoData = await saveTodoData(content, new URL(request.url).searchParams.get('flow') || AuthFlows.DEMO);
     return NextResponse.json(updatedTodoData);
 }
 
@@ -85,7 +85,7 @@ export async function DELETE(request: NextRequest) {
     if (!content || !content.id) {
         return NextResponse.json({error: 'ID is required for deletion'});
     }
-    await deleteTodoData(content.id);
+    await deleteTodoData(content.id, new URL(request.url).searchParams.get('flow') || AuthFlows.DEMO);
     return NextResponse.json({success: true});
 
 }
