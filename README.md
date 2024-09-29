@@ -98,27 +98,7 @@ Ensure you have the following installed on your machine:
    git clone https://github.com/yourusername/nextjs-todo-app.git
    cd nextjs-todo-app
     ```
-   ## Running the Project Locally
-
-To run this project locally, follow these steps:
-
-### Prerequisites
-
-Ensure you have the following installed on your machine:
-
-- **Node.js** (v16 or higher)
-- **npm** or **yarn**
-- **Clerk** account for managing authentication
-
-### Steps
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/yourusername/nextjs-todo-app.git
-   cd nextjs-todo-app
-   ```
-
+   
 2. **Install dependencies:**
 
    Using npm:
