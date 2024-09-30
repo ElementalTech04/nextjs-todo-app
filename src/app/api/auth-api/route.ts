@@ -62,7 +62,8 @@ const checkAuthStatus = (keyToken: string) => {
 
 // Set secure cookie
 const setAuthCookie = (res: NextRequest, token: string, userName: string) => {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     setCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token', token, { req: res, res,
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
