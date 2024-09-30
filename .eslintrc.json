@@ -1,7 +1,7 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
-    "no-unused-vars": "off",
-    "no-explicit-any": "off"
+    "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }],
+    "no-explicit-any": ["warn", { "fixToUnknown": false, "ignoreRestArgs": false }]
   }
 }
