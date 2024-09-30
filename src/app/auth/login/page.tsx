@@ -26,8 +26,8 @@ export default async function LoginPage({searchParams}: { searchParams: { [key: 
         LogError(demoTodoList.error, 'LoginPage', new Error(demoTodoList.error));
     }
 
-    LogInfo(`Fetched demo users: ${demoTodoList.length}`);
     demoTodoList.forEach((todo: TodoItem) => userSet.add(Number(todo.userId)));
+    LogInfo(`Fetched demo users: ${userSet.size}`);
 
     return (
         <>
