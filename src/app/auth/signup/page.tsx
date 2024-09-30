@@ -1,5 +1,5 @@
 import React from "react"
-import {AuthFlows, TodoItem} from "@/interface/types";
+import {AuthFlows} from "@/interface/types";
 import {DemoLogin} from "@/app/components/DemoLogin";
 import {ClerkLogin} from "@/app/components/ClerkLogin";
 

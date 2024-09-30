@@ -33,7 +33,7 @@ export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: 
         if (initialTodos) {
             dispatch(setTodos(initialTodos));
         }
-    }, [initialTodos]);
+    }, [dispatch, initialTodos]);
 
     return (
         <>

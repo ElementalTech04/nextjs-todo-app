@@ -13,10 +13,3 @@ export const LogWarning = (message: string) => {
 export const LogSuccess = (message: string) => {
     console.log(`Success: ${message}`);
 }
-
-module.exports = {
-    LogInfo,
-    LogError,
-    LogWarning,
-    LogSuccess
-}
