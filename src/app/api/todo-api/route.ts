@@ -11,12 +11,12 @@ const todoApiUrl = (flow: string) => flow === AuthFlows.DEMO
     : process.env.CHRONICLE_API_GATEWAY;
 
 const getTodoData = async (authHeader: string, flow: string): Promise<TodoItem[]> => {
-    LogInfo('Fetching todos');
     try {
         const authToken: string = authHeader?.split(' ')[1] || '';
-        const tokenDetails: JwtPayload = <JwtPayload> jwt.decode(authToken);
+        const tokenDetails: any = jwt.decode(authToken);
         const apiUrl = todoApiUrl(flow);
-        const userId = tokenDetails.username;
+        const userId = tokenDetails ? tokenDetails.username : undefined;
+        LogInfo(userId ? `Fetching todos for user ${userId}` : 'Fetching all todos');
         const url = userId ? `${apiUrl}/user/${userId}/todos/` : `${apiUrl}/todos`;
         const response = await axios.get(url);
         LogInfo(`Successfully fetched todos for user ${userId}`);
