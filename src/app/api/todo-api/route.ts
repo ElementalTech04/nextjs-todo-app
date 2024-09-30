@@ -1,9 +1,9 @@
-import axios, {AxiosResponse} from 'axios';
+import axios from 'axios';
 import {AuthFlows, TodoItem} from '@/interface/types';
 import {NextRequest, NextResponse} from "next/server";
-import jwt from "jsonwebtoken";
+import jwt, {JwtPayload} from "jsonwebtoken";
 import {NextError} from "next/dist/lib/is-error";
-import {LogError} from "@/app/api/api-utils/log-utils";
+import {LogError, LogInfo} from "@/app/api/api-utils/log-utils";
 
 
 const todoApiUrl = (flow: string) => flow === AuthFlows.DEMO
@@ -11,13 +11,15 @@ const todoApiUrl = (flow: string) => flow === AuthFlows.DEMO
     : process.env.CHRONICLE_API_GATEWAY;
 
 const getTodoData = async (authHeader: string, flow: string): Promise<TodoItem[]> => {
+    LogInfo('Fetching todos');
     try {
         const authToken: string = authHeader?.split(' ')[1] || '';
-        const tokenDetails: any = jwt.decode(authToken);
+        const tokenDetails: JwtPayload = <JwtPayload> jwt.decode(authToken);
         const apiUrl = todoApiUrl(flow);
-        const userId = tokenDetails?.username;
+        const userId = tokenDetails.username;
         const url = userId ? `${apiUrl}/user/${userId}/todos/` : `${apiUrl}/todos`;
         const response = await axios.get(url);
+        LogInfo(`Successfully fetched todos for user ${userId}`);
         return response.data;
     } catch (error) {
         const errorMessage = 'Failed to fetch todos';
@@ -32,6 +34,7 @@ const createTodoData = async (content: TodoItem, flow: string): Promise<TodoItem
     }
     try {
         const response = await axios.post(`${todoApiUrl}/todos`, content);
+        LogInfo(`Successfully created todo ${content.id} for user ${content.userId}`);
         return response.data;
     } catch (error) {
         const errorMessage = 'Failed to create todo';
@@ -46,6 +49,7 @@ const saveTodoData = async (content: TodoItem, flow: string): Promise<TodoItem> 
     }
     try {
         const response = await axios.put(`${todoApiUrl}/todos/${content.id}`, content);
+        LogInfo(`Successfully saved todo ${content.id} for user ${content.userId}`);
         return response.data;
     } catch (error) {
         const errorMessage = 'Failed to save todo';
@@ -60,6 +64,7 @@ const deleteTodoData = async (id: string | string[] | undefined, flow: string): 
     }
     try {
         await axios.delete(`${todoApiUrl}/todos/${id}`);
+        LogInfo(`Successfully deleted todo ${id}`);
     } catch (error) {
         const errorMessage = 'Failed to delete todo';
         LogError(errorMessage, flow, error as NextError);

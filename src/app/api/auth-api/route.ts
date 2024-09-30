@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import {getCookie, setCookie} from 'cookies-next';
 import {NextRequest, NextResponse} from "next/server";
 import {AuthFlows, TodoItem} from "@/interface/types";
+import {LogError, LogInfo} from "@/app/api/api-utils/log-utils";
 
 const DEMO_SECRET_KEY = process.env.DEMO_SECRET_KEY || 'supersecretkey';
 const JWT_EXPIRY = '1h';
@@ -17,6 +18,7 @@ const authenticateWithClerk = async (req: NextRequest): Promise<{
         // const clerkUser = await ClerkClient.verifySessionToken(sessionToken);
         return {isAuthenticated: true, user: ''};
     } catch (error) {
+        LogError('Failed to authenticate with Clerk', 'authenticateWithClerk', error as Error);
         return {isAuthenticated: false, user: undefined, error: 'Invalid token'};
     }
 };
@@ -24,7 +26,7 @@ const authenticateWithClerk = async (req: NextRequest): Promise<{
 // Fake authentication for demo mode
 const authenticateWithDemo = async (username: string, password: string, authFlow: string) => {
     const userNumber = parseInt(username, 10);
-
+    LogInfo(`Authenticating with demo mode for user ${userNumber}`);
     const totalTodoListResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/todo-api?flow=${authFlow}`, {
         method: 'GET',
         headers: {
@@ -39,21 +41,27 @@ const authenticateWithDemo = async (username: string, password: string, authFlow
     });
 
     if (!userList.has(userNumber) || isNaN(userNumber)) {
-        throw new Error('Invalid username.');
+        const errorMessage = 'Invalid username.';
+        const errorObj = new Error(errorMessage);
+        LogError(errorMessage, 'authenticateWithDemo', errorObj);
+        throw errorObj;
     }
+
+    LogInfo(`Successfully fetched demo todos list to validate user ${userNumber}`);
 
     // Create a fake JWT with username and password
     const token = jwt.sign({username, password}, DEMO_SECRET_KEY, {expiresIn: JWT_EXPIRY});
     return token;
 };
 
+// TODO: Integrate with redis to keep track of sessions
 const checkAuthStatus = (keyToken: string) => {
     const cookie = getCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token');
     return !!(cookie && cookie === keyToken);
 }
 
 // Set secure cookie
-const setAuthCookie = (res: NextRequest, token: string) => {
+const setAuthCookie = (res: NextRequest, token: string, userName: string) => {
     // @ts-ignore
     setCookie(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token', token, { req: res, res,
         httpOnly: true,
@@ -62,6 +70,7 @@ const setAuthCookie = (res: NextRequest, token: string) => {
         maxAge: 60 * 60,     // 1 hour expiry
         path: '/',           // Available throughout the app
     });
+    LogInfo(`Session token generated for user ${userName} and will expire in ${JWT_EXPIRY}`);
 };
 
 export async function GET(request: NextRequest) {
@@ -88,10 +97,10 @@ export async function POST(request: NextRequest) {
                 error?: string
             } = await authenticateWithClerk(request);
             if (!authResult.isAuthenticated) {
-                return NextResponse.json({error: 'Authentication failed'});
+                return NextResponse.json({error: 'Authentication failed', isAuthenticated: false});
             }
 
-            return NextResponse.json({message: 'Authenticated with Clerk', user: authResult.user});
+            return NextResponse.json({message: 'Authenticated with Clerk', isAuthenticated: true, user: authResult.user});
         }
 
         if (!username || !password) {
@@ -101,12 +110,12 @@ export async function POST(request: NextRequest) {
         // Authenticate in demo mode and generate a fake JWT if not already authenticated
         const demoToken = await authenticateWithDemo(username, password, authFlow);
 
-        setAuthCookie(request, demoToken);
+        setAuthCookie(request, demoToken, username);
         return NextResponse.json({message: 'Authenticated in demo mode', token: demoToken});
 
-    } catch (error: any) {
-        console.error(error);
-        return NextResponse.json({error: error.message});
+    } catch (error) {
+        const errorObj = error as Error;
+        return NextResponse.json({error: errorObj.message});
     }
 }
 
