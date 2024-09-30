@@ -5,9 +5,9 @@ import {ClerkLogin} from "@/app/components/ClerkLogin";
 import {LogError, LogInfo} from "@/app/api/api-utils/log-utils";
 
 export default async function LoginPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
-    const demoApiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/todo-api?flow=${searchParams.authFlow || AuthFlows.DEMO}`;
+    const authFlow = searchParams.flow || AuthFlows.DEMO;
+    const demoApiUrl = `/api/todo-api?flow=${authFlow}`;
     const userSet = new Set<number>();
-    const authFlow = searchParams.authFlow || AuthFlows.DEMO;
     const originPath = searchParams.originPath || '';
 
     const demoTodoList = await fetch(demoApiUrl, {

@@ -19,12 +19,13 @@ const getTodoData = async (authHeader: string, flow: string): Promise<TodoItem[]
         const userId = tokenDetails ? tokenDetails.username : undefined;
         LogInfo(userId ? `Fetching todos for user ${userId}` : 'Fetching all todos');
         const url = userId ? `${apiUrl}/user/${userId}/todos/` : `${apiUrl}/todos`;
+        LogInfo(`URL: ${url}`);
         const response = await axios.get(url);
         LogInfo(`Successfully fetched todos for user ${userId}`);
         return response.data;
     } catch (error) {
         const errorMessage = 'Failed to fetch todos';
-        LogError(errorMessage, flow, error as NextError);
+        LogError(errorMessage.toLowerCase(), 'getTodoData', error as NextError);
         throw new Error(errorMessage.concat(`: ${error}`));
     }
 };
@@ -39,7 +40,7 @@ const createTodoData = async (content: TodoItem, flow: string): Promise<TodoItem
         return response.data;
     } catch (error) {
         const errorMessage = 'Failed to create todo';
-        LogError(errorMessage, flow, error as NextError);
+        LogError(errorMessage.toLowerCase(), 'createTodoData', error as NextError);
         throw new Error(errorMessage.concat(`: ${error}`));
     }
 };
@@ -54,7 +55,7 @@ const saveTodoData = async (content: TodoItem, flow: string): Promise<TodoItem> 
         return response.data;
     } catch (error) {
         const errorMessage = 'Failed to save todo';
-        LogError(errorMessage, flow, error as NextError);
+        LogError(errorMessage.toLowerCase(), 'saveTodoData', error as NextError);
         throw new Error(errorMessage.concat(`: ${error}`));
     }
 };
@@ -68,7 +69,7 @@ const deleteTodoData = async (id: string | string[] | undefined, flow: string): 
         LogInfo(`Successfully deleted todo ${id}`);
     } catch (error) {
         const errorMessage = 'Failed to delete todo';
-        LogError(errorMessage, flow, error as NextError);
+        LogError(errorMessage.toLowerCase(), 'deleteTodoData', error as NextError);
         throw new Error(errorMessage.concat(`: ${error}`));
     }
 };
