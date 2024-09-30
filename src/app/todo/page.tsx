@@ -9,7 +9,7 @@ import {TodoListProviderContext} from "@/app/components/TodoListProviderContext"
 
 export default async function TodoPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
     const flow = searchParams.flow || AuthFlows.DEMO;
-    const loginUrl = `/auth/login?flow=${flow}&originPath=/todo`;
+    const loginUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?flow=${flow}`;
 
     // Access the cookies using Next.js cookies utility
     const cookieStore = cookies();
