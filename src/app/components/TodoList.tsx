@@ -7,18 +7,23 @@ import {Droppable} from "react-beautiful-dnd";
 import {useSelector} from "react-redux";
 import {RootState} from "@/app/store/store";
 import "../../styles/scroll.css";
+import {createSelector} from "reselect";
 
-const filterTodos = (todos: TodoItem[], isCompleted: boolean) => todos.filter((todo: TodoItem) => todo.completed === isCompleted)
+const selectTodos = (state: RootState) => state.todos.todos;
 
+const selectFilteredTodos = createSelector(
+    [selectTodos, (state, searchTerm) => searchTerm],
+    (todos, searchTerm) => todos.filter(todo =>
+        todo.completed === searchTerm
+    )
+);
 
 export const TodoList = ({isCompletedList: isCompletedList}: {
     isCompletedList: boolean
 }) => {
-    const todos: TodoItem[] = useSelector((state: RootState) => state.todos.todos);
+    const todos: TodoItem[] = useSelector((state: RootState) => selectFilteredTodos(state, isCompletedList));
 
-    const filteredTodos = useMemo(() => {
-        return filterTodos(todos, isCompletedList);
-    }, [todos, isCompletedList]);
+    console.log(todos);
 
     return (
         <>
@@ -29,7 +34,7 @@ export const TodoList = ({isCompletedList: isCompletedList}: {
                         ref={provided.innerRef}
                         className="w-full p-4 shadow-md h-[80%] overflow-y-scroll no-scrollbar">
                         {
-                            filteredTodos.map((todo: TodoItem, index: number) => (
+                            todos.map((todo: TodoItem, index: number) => (
                                 <div key={index}>
                                     <TodoListItem todoItem={todo} index={index}/>
                                 </div>

@@ -17,7 +17,7 @@ export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: 
     }
 
     const handleOnDragEnd = (result: DropResult) => {
-        const {source, destination} = result;
+        const {source, destination, draggableId} = result;
 
         console.log("end drag", result);
 
@@ -25,7 +25,8 @@ export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: 
         if (!destination) return;
 
         if (destination.droppableId !== source.droppableId) {
-            dispatch(toggleTodo(source.droppableId));
+            dispatch(toggleTodo(draggableId));
+             console.log("dispatch");
         }
 
         // Dispatch reorder action

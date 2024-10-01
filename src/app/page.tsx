@@ -4,8 +4,6 @@ import welcomeSvg from "@/assets/images/welcome.svg";
 import Image from "next/image";
 
 export default function HomePage() {
-
-
     return (
         <>
             <div className=" h-[90vh] m-4">

@@ -15,7 +15,6 @@ const getTodoData = async (authHeader: string, flow: string): Promise<TodoItem[]
         const authToken: string = authHeader?.split(' ')[1] || '';
         const tokenDetails: any = jwt.decode(authToken);
         const apiUrl = todoApiUrl(flow);
-        console.error(tokenDetails);
         const userId = tokenDetails ? tokenDetails.username : undefined;
         LogInfo(userId ? `Fetching todos for user ${userId}` : 'Fetching all todos');
         const url = userId ? `${apiUrl}/user/${userId}/todos/` : `${apiUrl}/todos`;
@@ -76,7 +75,6 @@ const deleteTodoData = async (id: string | string[] | undefined, flow: string): 
 
 export async function GET(request: NextRequest) {
     let todos: TodoItem[];
-    console.log(request.url);
     try {
         todos = await getTodoData(request.headers.get('Authorization') || '', new URL(request.url).searchParams.get('flow') || AuthFlows.DEMO);
     } catch (error) {
