@@ -40,7 +40,7 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
 
     const isAuthenticated = await checkAuthStatus();
     if (!isAuthenticated) {
-        redirect(loginUrl);  // Redirect if not authenticated
+        redirect(`/auth/login?flow=${flow}`);
     }
 
     // Fetch Todo data for the authenticated user
