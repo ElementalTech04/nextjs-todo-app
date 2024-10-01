@@ -40,18 +40,6 @@ To use demo mode:
   - *TDA-B4*: User switch in demo mode requires refreshing to see state change on screen (In Progress)
 
 
-### Implementation to be completed
-
-  - *TDA-S1*: Add functionality to mark tasks as completed (v2)
-  - *TDA-S2*: Add functionality to delete tasks (v2)
-  - *TDA-S3*: Add functionality to add notes to tasks (v2)
-  - *TDA-S4*: Finish Clerk integration (v2)
-  - *TDA-S5*: Add Suspense for loading screens (v2)
-  - *TDA-S6*: Integrate with redis for auth and todo storage (v2)
-  - *TDA-S7*: Add accounts page (v2)
-  - *TDA-S8*: Add framer motions (v2)
-
-
 ## File Structure
 
 Here’s a simplified tree of the key files in the project:
@@ -101,13 +89,6 @@ The Next.js Todo Web App is designed for ease of use and simplicity in managing 
 
 4. **Animations**: Smooth, responsive animations are implemented using **Framer Motion** to enhance the user experience when interacting with tasks.
 
-## Stable Widgets
-
-The app includes the following stable widgets:
-- **Todo List Container**: A well-optimized, stable container that holds and manages the state of all to-do tasks.
-- **Drag-and-Drop Task Reordering**: A feature that enables users to rearrange tasks without performance hiccups, using **React Beautiful DND**.
-- **User Authentication Flow**: A fully integrated user authentication flow powered by Clerk that securely handles user credentials and sessions.
-
 ## Running the Project Locally
 
 To run this project locally, follow these steps:
@@ -118,14 +99,13 @@ Ensure you have the following installed on your machine:
 
 - **Node.js** (v16 or higher)
 - **npm** or **yarn**
-- **Clerk** account for managing authentication
 
 ### Steps
 
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/nextjs-todo-app.git
+   git clone https://github.com/ElementalTech04/nextjs-todo-app
    cd nextjs-todo-app
     ```
    
@@ -148,10 +128,12 @@ Ensure you have the following installed on your machine:
    Create a `.env.local` file in the root directory and configure the required environment variables:
 
    ```bash
-   NEXT_PUBLIC_CLERK_FRONTEND_API=<your_clerk_frontend_api>
-   NEXT_PUBLIC_CLERK_API_KEY=<your_clerk_api_key>
-   NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
-   NEXT_PUBLIC_AUTH_TOKEN_KEY=<auth_token_key>
+   ENVIRONMENT=<dev|prod>
+   NEXT_PUBLIC_API_BASE_URL<this_apps_domain_url>
+   MOCK_DATA_API_URL=<mock_api_url>
+   CHRONICLE_API_GATEWAY=<remote_api_url>
+   NEXT_PUBLIC_AUTH_TOKEN_KEY=<auth_token_key_name>
+   AUTH_TOKEN_SECRET=<auth_token_secret>
    ```
 
 4. **Run the development server:**
@@ -173,3 +155,14 @@ Ensure you have the following installed on your machine:
 - **Full Todo List Functionality**: In the near future, I will add the rest of the core functionality, such as marking tasks as completed, deleting tasks, and adding notes to tasks. For now, there is a demo mode that allows you to test the drag-and-drop functionality.
 - **Persistent Task Storage**: Integration with a database to persist tasks across sessions.
 - **Mobile Optimizations**: Further UI/UX improvements for mobile devices.
+
+### Tracking
+
+- *TDA-S1*: Add functionality to mark tasks as completed (v2)
+- *TDA-S2*: Add functionality to delete tasks (v2)
+- *TDA-S3*: Add functionality to add notes to tasks (v2)
+- *TDA-S4*: Finish Clerk integration (v2)
+- *TDA-S5*: Add Suspense for loading screens (v2)
+- *TDA-S6*: Integrate with redis for auth and todo storage (v2)
+- *TDA-S7*: Add accounts page (v2)
+- *TDA-S8*: Add framer motions (v2)
