@@ -19,7 +19,9 @@ export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: 
     const handleOnDragEnd = (result: DropResult) => {
         const {source, destination} = result;
 
-        // If dropped outside of a droppable area, do nothing
+        console.log("end drag", result);
+
+        // If dropped outside a droppable area, do nothing
         if (!destination) return;
 
         // Dispatch reorder action
