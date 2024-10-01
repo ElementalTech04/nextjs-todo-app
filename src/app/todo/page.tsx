@@ -16,7 +16,7 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
 
     const flow = searchParams.flow || AuthFlows.DEMO;
     const authUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?flow=${flow}&token=${authToken}`;
-    const loginUrl = `/auth/login?flow=${flow}`
+    const loginUrl = `/auth/login?flow=${flow}&originPath=/todo`
 
 
 
