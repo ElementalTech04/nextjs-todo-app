@@ -25,7 +25,7 @@ To use demo mode:
 
 ## Production State
 
-![site_bundle.png](src%2Fassets%2Fimages%2Fsite_bundle.png)
+![site_bundle.png](./src/assets/images/site_bundle.png)
 
 *Production bundle with sizes to be deployed to **AWS Amplify***
 
