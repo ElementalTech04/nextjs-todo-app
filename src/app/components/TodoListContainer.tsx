@@ -43,7 +43,7 @@ export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: 
 
     return (
         <><DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleOnDragStart}>
-            <div className="flex flex-col sm:flex-row justify-between">
+            <div className="flex flex-col sm:flex-row justify-between h-[100%]">
                 <section className="bg-black p-4 mb-5 sm:mb-0 rounded-lg w-[100%] sm:w-[48%]">
                     <h1 className="text-1xl sm:text-3xl align-left font-bold">In Progress</h1>
                     <hr className="my-4 border-gray-300"/>
