@@ -6,7 +6,7 @@ import {DragDropContext, DropResult} from "react-beautiful-dnd";
 import {TodoList} from "@/app/components/TodoList";
 import React, {useEffect} from "react";
 import {TodoItem} from "@/interface/types";
-import {reorderTasks, setTodos} from "@/app/store/todo-slice";
+import {reorderTasks, setTodos, toggleTodo} from "@/app/store/todo-slice";
 
 
 export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: TodoItem[] }) => {
@@ -23,6 +23,10 @@ export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: 
 
         // If dropped outside a droppable area, do nothing
         if (!destination) return;
+
+        if (destination.droppableId !== source.droppableId) {
+            dispatch(toggleTodo(source.droppableId));
+        }
 
         // Dispatch reorder action
         dispatch(reorderTasks({
