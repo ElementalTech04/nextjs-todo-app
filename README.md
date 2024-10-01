@@ -15,7 +15,7 @@ The **Next.js Todo Web App** is a monolithic to-do list application built using 
 
 ## Using Demo Mode
 
-**This app will be deployed on Cloudflare Pages soon and this readme will be updated with links to the live site.**
+[Site Link](https://todo-app.symphonytechsolutions.com)
 
 To use demo mode:
 
@@ -23,6 +23,18 @@ To use demo mode:
 - Enter any number in the displayed range as your username and any characters for the password.
 - You will be redirected to the dashboard, where you can test the drag-and-drop functionality and log out at any time.
 
+## Production State
+
+![site_bundle.png](src%2Fassets%2Fimages%2Fsite_bundle.png)
+
+*Production bundle with sizes to be deployed to **AWS Amplify***
+
+### Known Issues
+
+- Drag and drop functionality has defects
+    - *TDA-B1*: State array does not update when dragging a task to other column (In Progress)
+    - *TDA-B2*: Dragging a task to the same column does not update the index (In Progress)
+    - 
 
 ## File Structure
 
@@ -51,6 +63,8 @@ Here’s a simplified tree of the key files in the project:
   ├── tailwind.config.ts 
   └── package.json
 ```
+
+
 
 
 ## How It Works

@@ -63,7 +63,7 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
         return await response.json();
     };
 
-    let todos: TodoItem[] = await fetchTodoData();
+    let todos: TodoItem[] = await fetchTodoData( );
 
     if(flow === AuthFlows.DEMO) {
         todos = todos.map(todo => ({...todo, description: `This task belongs to  demo user ${todo.userId}`}));
