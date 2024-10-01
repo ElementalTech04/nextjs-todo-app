@@ -29,7 +29,6 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
     // Fail fast if no auth token is found
     if (!authToken) {
         redirect(loginUrl);  // Redirect to the login page
-        return null;
     }
 
     // Check auth status with the backend
@@ -42,7 +41,6 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
     const isAuthenticated = await checkAuthStatus();
     if (!isAuthenticated) {
         redirect(loginUrl);  // Redirect if not authenticated
-        return null;
     }
 
     // Fetch Todo data for the authenticated user
