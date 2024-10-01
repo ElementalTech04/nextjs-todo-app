@@ -6,14 +6,19 @@ import {redirect} from 'next/navigation';
 import {LogoutButton} from "@/app/components/LogoutButton";
 import {DemoModeButton} from "@/app/components/DemoModeButton";
 import {TodoListProviderContext} from "@/app/components/TodoListProviderContext";
+import {log} from "node:util";
 
 export default async function TodoPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
-    const flow = searchParams.flow || AuthFlows.DEMO;
-    const loginUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?flow=${flow}`;
 
     // Access the cookies using Next.js cookies utility
     const cookieStore = cookies();
     const authToken = cookieStore.get(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token')?.value;
+
+    const flow = searchParams.flow || AuthFlows.DEMO;
+    const authUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?flow=${flow}&token=${authToken}`;
+    const loginUrl = `/auth/login?flow=${flow}`
+
+
 
     // Temporary fast fail for non-demo flows
     if (flow !== AuthFlows.DEMO) {
@@ -33,14 +38,14 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
 
     // Check auth status with the backend
     const checkAuthStatus = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?token=${authToken}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?`);
         const responseData = await response.json();
         return responseData.success;
     };
 
     const isAuthenticated = await checkAuthStatus();
     if (!isAuthenticated) {
-        redirect(loginUrl);  // Redirect if not authenticated
+        redirect(loginUrl);
     }
 
     // Fetch Todo data for the authenticated user
