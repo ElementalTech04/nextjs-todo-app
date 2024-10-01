@@ -34,7 +34,7 @@ To use demo mode:
 - Drag and drop functionality has defects
     - *TDA-B1*: State array does not update when dragging a task to other column (In Progress)
     - *TDA-B2*: Dragging a task to the same column does not update the index (In Progress)
-    - 
+    - *TDA-B3*: Mobile styling of todo list needs modifying (In Progress)
 
 ## File Structure
 
