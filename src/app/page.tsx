@@ -8,10 +8,10 @@ export default function HomePage() {
         <>
             <div className=" h-[90vh] m-4">
                 <div className="flex flex-col justify-center row-span-full bg-gray-700 rounded-lg w-full h-full p-6 text-center p-24">
-                    <div className="flex items-center justify-center F">
-                        <Image src={welcomeSvg} alt="welcome" width={250} height={250}/>
+                    <div className="flex items-center justify-center sm:w-100">
+                        <Image src={welcomeSvg} alt="welcome" width={200} height={200} className={"w-[30%]"}/>
                     </div>
-                    <h1 className="text-5xl font-bold leading-tight p-4">Hello! <br /> Welcome to my Todo App.</h1>
+                    <h1 className="text-2xl sm:text-5xl font-bold leading-tight p-4">Hello! <br /> Welcome to my Todo App.</h1>
                     <p>I built this Todo App to demonstrate some of the possibilities of Next.js, Redux, Tailwind CSS,
                         Clerk, React Beautiful DND, and Framer Motion.</p>
                     <br />
