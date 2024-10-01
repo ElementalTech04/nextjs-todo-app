@@ -1,5 +1,5 @@
 # Next.js Todo Web App
-**version 0.2.0**
+**version 0.9.0**
 
 ## Description
 
@@ -32,12 +32,25 @@ To use demo mode:
 ### Known Issues
 
 - Drag and drop functionality has defects
-    - *TDA-B1*: State array does not update when dragging a task to other column (In Progress)
-    - *TDA-B2*: Dragging a task to the same column does not update the index (In Progress)
+  - *TDA-B1*: State array does not update when dragging a task to other column (In Progress)
+  - *TDA-B2*: Dragging a task to the same column does not update the index (In Progress)
 - Styling issues
-    - *TDA-B3*: Mobile styling of todo list needs modifying (In Progress)
+  - *TDA-B3*: Mobile styling of todo list needs modifying (In Progress)
 - State issues
-    - *TDA-B4*: User switch in demo mode requires refreshing to see state change on screen (In Progress)
+  - *TDA-B4*: User switch in demo mode requires refreshing to see state change on screen (In Progress)
+
+
+### Implementation to be completed
+
+  - *TDA-S1*: Add functionality to mark tasks as completed (v2)
+  - *TDA-S2*: Add functionality to delete tasks (v2)
+  - *TDA-S3*: Add functionality to add notes to tasks (v2)
+  - *TDA-S4*: Finish Clerk integration (v2)
+  - *TDA-S5*: Add Suspense for loading screens (v2)
+  - *TDA-S6*: Integrate with redis for auth and todo storage (v2)
+  - *TDA-S7*: Add accounts page (v2)
+  - *TDA-S8*: Add framer motions (v2)
+
 
 ## File Structure
 
