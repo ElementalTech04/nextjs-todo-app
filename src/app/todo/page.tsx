@@ -66,19 +66,19 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
     let todos: TodoItem[] = await fetchTodoData( );
 
     if(flow === AuthFlows.DEMO) {
-        todos = todos.map(todo => ({...todo, description: `This task belongs to  demo user ${todo.userId}`}));
+        todos = todos.map(todo => ({...todo, description: `This task belongs to demo user ${todo.userId}`}));
     }
 
     return (
         <>
             <div
-                className="h-screen bg-darkGreen rounded-lg w-full text-center grid grid-cols-4 grid-rows-5 gap-4 p-4 text-white">
+                className="h-auto sm:h-[90vh] m-4 bg-darkGreen rounded-lg w-full text-center grid grid-cols-4 grid-rows-5 gap-4 p-4 text-white">
                 <header
-                    className="col-span-4 row-span-1 bg-black p-5 text-center rounded-lg grid grid-cols-10 grid-rows-2">
-                    <h1 className="col-span-10 row-span-1 text-6xl font-bold">My To-Do List</h1>
+                    className="h-[17vh] sm:h-auto col-span-4 row-span-1 bg-black p-8 text-center rounded-lg grid grid-cols-10 grid-rows-2">
+                    <h1 className="col-span-10 row-span-1 text-3xl sm:text-6xl font-bold">My To-Do List</h1>
                     <LogoutButton flow={flow} redirectPath="/todo"/>
                 </header>
-                <div className="col-span-4 row-span-5 p-5">
+                <div className="h-[150vh] sm:h-auto w-full col-span-4 row-span-5 p-5">
                     <TodoListProviderContext>
                         <TodoListContainer initialTodos={todos}/>
                     </TodoListProviderContext>

@@ -42,22 +42,21 @@ export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: 
     }, [dispatch, initialTodos]);
 
     return (
-        <>
-            <div className="flex flex-wrap justify-between h-[100%]">
-                <DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleOnDragStart}>
-                    <section className="bg-black p-4 rounded-lg w-[48%] h-[100%]">
-                        <h1 className="text-3xl align-left font-bold">In Progress</h1>
-                        <hr className="my-4 border-gray-300"/>
-                        <TodoList isCompletedList={false}/>
-                    </section>
-                    <section className="bg-black p-4 rounded-lg w-[48%] h-[100%]">
-                        <h1 className="text-3xl align-left font-bold">Completed</h1>
-                        <hr className="my-4 border-gray-300"/>
-                        <TodoList isCompletedList={true}/>
-                    </section>
-                </DragDropContext>
-            </div>
+        <><DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleOnDragStart}>
+            <div className="flex flex-col sm:flex-row justify-between">
+                <section className="bg-black p-4 mb-5 sm:mb-0 rounded-lg w-[100%] sm:w-[48%]">
+                    <h1 className="text-1xl sm:text-3xl align-left font-bold">In Progress</h1>
+                    <hr className="my-4 border-gray-300"/>
+                    <TodoList isCompletedList={false}/>
+                </section>
+                <section className="bg-black p-4 rounded-lg w-[100%] sm:w-[48%]">
+                    <h1 className="text-1xl sm:text-3xl align-left font-bold">Completed</h1>
+                    <hr className="my-4 border-gray-300"/>
+                    <TodoList isCompletedList={true}/>
+                </section>
 
+            </div>
+        </DragDropContext>
         </>
     );
 }

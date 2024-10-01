@@ -21,7 +21,7 @@ export const LogoutButton = ({flow, redirectPath}: { flow: string, redirectPath:
                             });
                             router.push(LOGIN_PATH.replace(':flow', flow).replace(':redirectPath', redirectPath));
                         }}
-                        className="col-span-10 row-span-2 justify-self-end hover:scale-110 transition-all flex items-center flex-col"/>
+                        className="col-span-10 row-span-2 justify-self-end hover:scale-110 transition-all flex items-center flex-col w-[7%] sm:w-[17%] text-xs sm:text-xl"/>
         </>
     )
 }
