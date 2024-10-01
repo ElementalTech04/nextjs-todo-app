@@ -6,7 +6,6 @@ import {redirect} from 'next/navigation';
 import {LogoutButton} from "@/app/components/LogoutButton";
 import {DemoModeButton} from "@/app/components/DemoModeButton";
 import {TodoListProviderContext} from "@/app/components/TodoListProviderContext";
-import {log} from "node:util";
 
 export default async function TodoPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
 
@@ -14,13 +13,14 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
     const cookieStore = cookies();
     const authToken = cookieStore.get(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token')?.value;
 
+    const logLoginMessage = () => console.log('Please login to see the todo list');
     const flow = searchParams.flow || AuthFlows.DEMO;
     const authUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?flow=${flow}&token=${authToken}`;
     const loginUrl = `/auth/login?flow=${flow}&originPath=/todo`
 
 
 
-    // Temporary fast fail for non-demo flows
+    // Temporary placeholder for non-demo flows
     if (flow !== AuthFlows.DEMO) {
         return (
             <div
@@ -33,18 +33,20 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
 
     // Fail fast if no auth token is found
     if (!authToken) {
+        logLoginMessage();
         redirect(loginUrl);  // Redirect to the login page
     }
 
     // Check auth status with the backend
     const checkAuthStatus = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?`);
+        const response = await fetch(authUrl);
         const responseData = await response.json();
         return responseData.success;
     };
 
     const isAuthenticated = await checkAuthStatus();
     if (!isAuthenticated) {
+        logLoginMessage();
         redirect(loginUrl);
     }
 
