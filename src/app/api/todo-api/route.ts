@@ -81,6 +81,7 @@ export async function GET(request: NextRequest) {
         const errorObj: Error = error as Error;
         return NextResponse.json({error: errorObj.message});
     }
+    console.error(todos);
     return NextResponse.json(todos);
 }
 

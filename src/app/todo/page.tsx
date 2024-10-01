@@ -6,7 +6,8 @@ import {redirect} from 'next/navigation';
 import {LogoutButton} from "@/app/components/LogoutButton";
 import {DemoModeButton} from "@/app/components/DemoModeButton";
 import {TodoListProviderContext} from "@/app/components/TodoListProviderContext";
-import {LogError, LogInfo} from "@/app/api/api-utils/log-utils";
+import {LogInfo} from "@/app/api/api-utils/log-utils";
+import {AUTH_API_URL, BASE_URL, LOGIN_PATH, TODO_API_URL} from "@/app/constants";
 
 export default async function TodoPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
 
@@ -14,10 +15,9 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
     const cookieStore = cookies();
     const authToken = cookieStore.get(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'token')?.value;
 
-    const logLoginMessage = () => console.log('Please login to see the todo list');
     const flow = searchParams.flow || AuthFlows.DEMO;
-    const authUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-api?flow=${flow}&token=${authToken}`;
-    const loginUrl = `/auth/login?flow=${flow}&originPath=/todo`
+    const authUrl = BASE_URL.concat(AUTH_API_URL.replace(':flow', flow)).concat('&token=').concat(authToken || '');
+    const loginUrl = LOGIN_PATH.replace(':flow', flow).replace(':redirectPath', '/todo');
 
 
 
@@ -34,7 +34,7 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
 
     // Fail fast if no auth token is found
     if (!authToken) {
-        LogInfo('No auth token found in cookies, redirecting user to login page');
+        LogInfo('No auth token found in cookies, redirecting user to login page: ' + loginUrl);
         redirect(loginUrl);  // Redirect to the login page
     }
 
@@ -51,9 +51,9 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
         redirect(loginUrl);
     }
 
-    // Fetch Todo data for the authenticated user
+    // Fetch todo data for the authenticated user
     const fetchTodoData = async () => {
-        const todoUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/todo-api?flow=${flow}`;
+        const todoUrl = BASE_URL.concat(TODO_API_URL.replace(':flow', flow));
         const response = await fetch(todoUrl, {
             method: 'GET',
             headers: {
@@ -65,7 +65,9 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
 
     let todos: TodoItem[] = await fetchTodoData();
 
-    if(flow === AuthFlows.DEMO) todos = todos.map(todo => ({...todo, description: `This task belongs to  demo user ${todo.userId}`}));
+    if(flow === AuthFlows.DEMO) {
+        todos = todos.map(todo => ({...todo, description: `This task belongs to  demo user ${todo.userId}`}));
+    }
 
     return (
         <>
@@ -74,7 +76,7 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
                 <header
                     className="col-span-4 row-span-1 bg-black p-5 text-center rounded-lg grid grid-cols-10 grid-rows-2">
                     <h1 className="col-span-10 row-span-1 text-6xl font-bold">My To-Do List</h1>
-                    <LogoutButton/>
+                    <LogoutButton flow={flow} redirectPath="/todo"/>
                 </header>
                 <div className="col-span-4 row-span-5 p-5">
                     <TodoListProviderContext>

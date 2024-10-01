@@ -3,6 +3,7 @@ import {getCookie, setCookie} from 'cookies-next';
 import {NextRequest, NextResponse} from "next/server";
 import {AuthFlows, TodoItem} from "@/interface/types";
 import {LogError, LogInfo} from "@/app/api/api-utils/log-utils";
+import {BASE_URL, TODO_API_URL} from "@/app/constants";
 
 const DEMO_SECRET_KEY = process.env.DEMO_SECRET_KEY || 'supersecretkey';
 const JWT_EXPIRY = '1h';
@@ -27,7 +28,7 @@ const authenticateWithClerk = async (req: NextRequest): Promise<{
 const authenticateWithDemo = async (username: string, password: string, authFlow: string) => {
     const userNumber = parseInt(username, 10);
     LogInfo(`Authenticating with demo mode for user ${userNumber}`);
-    const totalTodoListResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/todo-api?flow=${authFlow}`, {
+    const totalTodoListResponse = await fetch(BASE_URL.concat(TODO_API_URL.replace(':flow', authFlow)), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
