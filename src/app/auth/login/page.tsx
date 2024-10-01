@@ -3,12 +3,13 @@ import {DemoLogin} from "@/app/components/DemoLogin";
 import {AuthFlows, TodoItem} from "@/interface/types";
 import {ClerkLogin} from "@/app/components/ClerkLogin";
 import {LogError, LogInfo} from "@/app/api/api-utils/log-utils";
+import {BASE_URL, LOGIN_PATH} from "@/app/constants";
 
 export default async function LoginPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
     const authFlow = searchParams.flow || AuthFlows.DEMO;
-    const demoApiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/todo-api?flow=${authFlow}`;
+    const demoApiUrl = BASE_URL.concat(LOGIN_PATH.replace(':flow', authFlow).replace(':redirectPath', searchParams.redirectPath || ''));
     const userSet = new Set<number>();
-    const originPath = searchParams.originPath || '';
+    const redirectPath = searchParams.redirectPath || '';
 
     const demoTodoList = await fetch(demoApiUrl, {
         method: 'GET',
@@ -32,7 +33,7 @@ export default async function LoginPage({searchParams}: { searchParams: { [key: 
     return (
         <>
             {authFlow === AuthFlows.DEMO ?
-                <DemoLogin users={userSet} authFlow={authFlow} originPath={originPath} />
+                <DemoLogin users={userSet} authFlow={authFlow} originPath={redirectPath} />
                 :
                 <ClerkLogin/>
             }

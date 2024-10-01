@@ -21,9 +21,9 @@ const selectFilteredTodos = createSelector(
 export const TodoList = ({isCompletedList: isCompletedList}: {
     isCompletedList: boolean
 }) => {
-    const todos: TodoItem[] = useSelector((state: RootState) => selectFilteredTodos(state, isCompletedList));
+    const todos: TodoItem[] = useSelector((state: RootState) => state.todos.todos);
 
-    console.log(todos);
+    console.log(isCompletedList ? `completed: ${JSON.stringify(todos)}` : `incomplete: ${JSON.stringify(todos)}`);
 
     return (
         <>

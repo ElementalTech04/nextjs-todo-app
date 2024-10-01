@@ -23,8 +23,6 @@ export interface TodoItem {
 
 export interface TodoState {
     todos: TodoItem[];
-    completedCount: number,
-    incompleteCount: number,
     loading: boolean;
     error: Error | null;
 

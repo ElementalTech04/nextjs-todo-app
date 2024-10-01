@@ -32,11 +32,11 @@ export default function TodoListItem({todoItem: todoItem, index: index}: { todoI
 
                     {/* Task Information */}
                     <div className="col-span-5 row-span-2 flex-grow">
-                        <h3 className="text-3xl text m-3 tracking-wide">
+                        <h3 className="text-xl text m-3 tracking-wide">
                             <span className="font-bold " >Title: </span>
                             {todoItem?.title}
                         </h3>
-                        <p className="text-gray-600 m-4 tracking-wide">
+                        <p className="text-gray-600 m-4 text-sm tracking-wide">
                             <span className="font-bold" >Description: </span>
                             {todoItem?.description}
                         </p>

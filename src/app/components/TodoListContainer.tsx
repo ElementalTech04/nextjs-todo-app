@@ -26,7 +26,6 @@ export const TodoListContainer = ({initialTodos: initialTodos}: { initialTodos: 
 
         if (destination.droppableId !== source.droppableId) {
             dispatch(toggleTodo(draggableId));
-             console.log("dispatch");
         }
 
         // Dispatch reorder action

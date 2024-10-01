@@ -77,7 +77,7 @@ export const DemoLogin = ({users: users, authFlow: authFlow, originPath: originP
 
     return (
         <>
-            <div className="h-[90vh] m-8 bg-gray-100 flex items-center justify-center text-black">
+            <div className="h-[90vh] m-8 flex items-center justify-center text-black">
                 <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                     <h1 className="text-2xl font-bold text-center mb-4">Demo Login</h1>
                     <p className="text-sm text-black text-center mb-6">

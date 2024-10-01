@@ -1,10 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {TodoItem, TodoState} from "@/interface/types";
 
 const initialState: TodoState = {
     todos: [],
-    completedCount: 0,
-    incompleteCount: 0,
     loading: false,
     error: null,
 };
@@ -15,7 +13,7 @@ const todoSlice = createSlice({
     initialState,
     reducers: {
         addTodo: (state, action: PayloadAction<TodoItem>) => {
-            state.todos.push({ ...action.payload, completed: false });
+            state.todos.push({...action.payload, completed: false});
         },
         setTodos: (state, action: PayloadAction<TodoItem[]>) => {
             state.todos = action.payload
@@ -27,7 +25,7 @@ const todoSlice = createSlice({
             }
         },
         reorderTasks: (state, action: PayloadAction<{ sourceIndex: number; destinationIndex: number }>) => {
-            const { sourceIndex, destinationIndex } = action.payload;
+            const {sourceIndex, destinationIndex} = action.payload;
             const [movedTask] = state.todos.splice(sourceIndex, 1);
             state.todos.splice(destinationIndex, 0, movedTask);
         },

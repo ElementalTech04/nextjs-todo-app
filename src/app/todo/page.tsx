@@ -6,6 +6,7 @@ import {redirect} from 'next/navigation';
 import {LogoutButton} from "@/app/components/LogoutButton";
 import {DemoModeButton} from "@/app/components/DemoModeButton";
 import {TodoListProviderContext} from "@/app/components/TodoListProviderContext";
+import {LogError, LogInfo} from "@/app/api/api-utils/log-utils";
 
 export default async function TodoPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
 
@@ -33,7 +34,7 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
 
     // Fail fast if no auth token is found
     if (!authToken) {
-        logLoginMessage();
+        LogInfo('No auth token found in cookies, redirecting user to login page');
         redirect(loginUrl);  // Redirect to the login page
     }
 
@@ -46,7 +47,7 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
 
     const isAuthenticated = await checkAuthStatus();
     if (!isAuthenticated) {
-        logLoginMessage();
+        LogInfo('Auth token not valid, redirecting user to login page');
         redirect(loginUrl);
     }
 
@@ -62,7 +63,9 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
         return await response.json();
     };
 
-    const todos: TodoItem[] = await fetchTodoData();
+    let todos: TodoItem[] = await fetchTodoData();
+
+    if(flow === AuthFlows.DEMO) todos = todos.map(todo => ({...todo, description: `This task belongs to  demo user ${todo.userId}`}));
 
     return (
         <>
