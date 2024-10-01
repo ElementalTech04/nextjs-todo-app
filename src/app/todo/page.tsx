@@ -1,12 +1,14 @@
 import React from 'react';
 import {AuthFlows, TodoItem} from '@/interface/types';
 import {cookies} from 'next/headers';
+import Image from "next/image";
 import {TodoListContainer} from '@/app/components/TodoListContainer';
 import {redirect} from 'next/navigation';
 import {LogoutButton} from "@/app/components/LogoutButton";
 import {DemoModeButton} from "@/app/components/DemoModeButton";
 import {TodoListProviderContext} from "@/app/components/TodoListProviderContext";
 import {LogInfo} from "@/app/api/api-utils/log-utils";
+import warningSvg from '../../assets/images/construction-danger-exclamantion.svg';
 import {AUTH_API_URL, BASE_URL, LOGIN_PATH, TODO_API_URL} from "@/app/constants";
 
 export default async function TodoPage({searchParams}: { searchParams: { [key: string]: string | undefined } }) {
@@ -25,8 +27,9 @@ export default async function TodoPage({searchParams}: { searchParams: { [key: s
     if (flow !== AuthFlows.DEMO) {
         return (
             <div
-                className="h-screen bg-darkGreen rounded-lg w-full text-center align-middle justify-center h-full flex flex-col items-center">
-                <h1 className="text-2xl font-bold">This feature is not available in this flow</h1>
+                className="h-screen bg-darkGreen rounded-lg w-full text-center align-middle justify-center h-full flex flex-col items-center m-5">
+                <Image src={warningSvg} alt="logo" width={200} height={200}/>
+                <h1 className="text-2xl font-bold">This feature is not available just yet</h1>
                 <DemoModeButton/>
             </div>
         );
